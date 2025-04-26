@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   db:
     image: postgres:15
@@ -23,7 +22,6 @@ services:
     volumes:
       - .:/rails
       - bundle_cache:/rails/vendor/bundle
-      - node_modules:/rails/node_modules
     ports:
       - "3000:3000"
     environment:
