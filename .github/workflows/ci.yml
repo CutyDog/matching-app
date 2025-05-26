@@ -18,9 +18,9 @@ jobs:
           TARGET_BRANCH: ${{ github.base_ref }}
         run: |
           git fetch origin ${TARGET_BRANCH}
-          count=`git diff origin/${TARGET_BRANCH} HEAD --name-only --relative=client | wc -l`
+          count=`git diff origin/${TARGET_BRANCH} HEAD --name-only --relative=../client | wc -l`
           echo "::set-output name=client-diff-count::$(echo $count)"
-          count=`git diff origin/${TARGET_BRANCH} HEAD --name-only --relative=server | wc -l`
+          count=`git diff origin/${TARGET_BRANCH} HEAD --name-only --relative=../server | wc -l`
           echo "::set-output name=server-diff-count::$(echo $count)"
   frontend:
     runs-on: ubuntu-latest
