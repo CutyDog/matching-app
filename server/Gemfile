@@ -36,7 +36,8 @@ gem "thruster", require: false
 # gem "rack-cors"
 
 gem 'ridgepole', '~> 3.0'
-gem 'devise'
+gem 'bcrypt'
+gem 'jwt'
 
 group :development do
   gem 'annotaterb'
