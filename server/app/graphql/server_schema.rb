@@ -8,6 +8,8 @@ class ServerSchema < GraphQL::Schema
   # For batch-loading (see https://graphql-ruby.org/dataloader/overview.html)
   use GraphQL::Dataloader
 
+  # rubocop:disable Lint/UnusedMethodArgument, Lint/UselessMethodDefinition
+
   # GraphQL-Ruby calls this when something goes wrong while running a query:
   def self.type_error(err, context)
     # if err.is_a?(GraphQL::InvalidNullError)
@@ -43,4 +45,6 @@ class ServerSchema < GraphQL::Schema
     # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
     GlobalID.find(global_id)
   end
+
+  # rubocop:enable Lint/UnusedMethodArgument, Lint/UselessMethodDefinition
 end

@@ -9,11 +9,11 @@ namespace :ridgepole do
   private
 
   def schema_file
-    Rails.root.join('db', 'schemas', 'Schemafile')
+    Rails.root.join('db/schemas/Schemafile')
   end
 
   def config_file
-    Rails.root.join('config', 'database.yml')
+    Rails.root.join('config/database.yml')
   end
 
   def ridgepole(*options)
