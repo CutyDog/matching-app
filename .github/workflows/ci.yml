@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  check-diff:
+    runs-on: ubuntu-latest
+    outputs:
+      has-changed-frontend-files: ${{ steps.check-frontend-files.outputs.any_changed == 'true' }}
+      has-changed-backend-files: ${{ steps.check-backend-files.outputs.any_changed == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check frontend files
+        id: check-frontend-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: "client/**"
+      - name: Check backend files
+        id: check-backend-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: "server/**"
+  frontend:
+    runs-on: ubuntu-latest
+    needs: check-diff
+    if: needs.check-diff.outputs.has-changed-frontend-files == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # - name: Install dependencies
+      #   if: steps.diff.outputs.diff-count > 0
+      #   working-directory: ./client
+      #   run: npm install
+  backend:
+    runs-on: ubuntu-latest
+    needs: check-diff
+    if: needs.check-diff.outputs.has-changed-backend-files == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.3
+          bundler-cache: true
+      - name: Run RuboCop
+        if: steps.diff.outputs.diff-count > 0
+        working-directory: ./server
+        run: bundle exec rubocop
