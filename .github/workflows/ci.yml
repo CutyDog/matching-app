@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/diff
+        name: diff
+        id: diff
+        with:
+          subdir: client
+      # - name: Install dependencies
+      #   if: steps.diff.outputs.diff-count > 0
+      #   working-directory: ./client
+      #   run: npm install
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/diff
+        name: diff
+        id: diff
+        with:
+          subdir: server
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.3
+          bundler-cache: true
+      - name: Run RuboCop
+        if: steps.diff.outputs.diff-count > 0
+        working-directory: ./server
+        run: bundle exec rubocop
