@@ -27,11 +27,13 @@ RSpec.describe User, type: :model do
   end
 
   describe '.authentication' do
-    let(:user) { create(:user, email: 'test@example.com', password: 'password') }
     subject { user.authenticate(password) }
+
+    let(:user) { create(:user, email: 'test@example.com', password: 'password') }
 
     context 'when password is correct' do
       let(:password) { 'password' }
+
       it do
         expect(subject).to be_truthy
       end
@@ -39,6 +41,7 @@ RSpec.describe User, type: :model do
 
     context 'when password is incorrect' do
       let(:password) { 'wrong_password' }
+
       it do
         expect(subject).to be_falsey
       end
@@ -46,11 +49,13 @@ RSpec.describe User, type: :model do
   end
 
   describe '.find_by_jwt!' do
+    subject { described_class.find_by_jwt!(jwt_token) } # rubocop:disable Rails/DynamicFindBy
+
     let(:user) { create(:user, email: 'test@example.com', password: 'password') }
-    subject { User.find_by_jwt!(jwt_token) }
 
     context 'when the JWT token is valid' do
       let(:jwt_token) { user.issue_jwt_token }
+
       it do
         expect(subject).to eq(user)
       end
@@ -58,6 +63,7 @@ RSpec.describe User, type: :model do
 
     context 'when the JWT token cannot be decoded' do
       let(:jwt_token) { 'invalid_token' }
+
       it do
         expect { subject }.to raise_error(User::UnauthorizedError, 'Invalid JWT token')
       end
@@ -70,16 +76,19 @@ RSpec.describe User, type: :model do
           Rails.application.credentials.secret_key_base
         )
       end
+
       it do
         expect { subject }.to raise_error(User::UnauthorizedError, 'JWT token expired')
       end
     end
 
     context 'when user is not found' do
-      before do
-        allow(User).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
-      end
       let(:jwt_token) { user.issue_jwt_token }
+
+      before do
+        allow(described_class).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
+      end
+
       it do
         expect { subject }.to raise_error(User::UnauthorizedError, 'User not found')
       end

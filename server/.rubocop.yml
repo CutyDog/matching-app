@@ -1,10 +1,31 @@
 inherit_from: .rubocop_todo.yml
 
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
 Style/FrozenStringLiteralComment:
+  Enabled: false
+Layout/TrailingEmptyLines:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+RSpec/NamedSubject:
   Enabled: false
 
 AllCops:
-  Include:
-    - 'app/**/*'
+  Exclude:
+    - 'app/graphql/server_schema.rb'
+    - 'Gemfile'
+    - 'Gemfile.lock'
+    - 'Rakefile'
+    - 'config.ru'
+    - 'bin/**/*'
+    - 'config/**/*'
+    - 'db/**/*'
     - 'lib/**/*'
-    - 'spec/**/*'
+    - 'log/**/*'
+    - 'public/**/*'
+    - 'storage/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'

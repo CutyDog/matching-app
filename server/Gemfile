@@ -38,9 +38,11 @@ gem "thruster", require: false
 gem 'ridgepole', '~> 3.0'
 gem 'bcrypt'
 gem 'jwt'
+gem 'graphql'
 
 group :development do
   gem 'annotaterb'
+  gem 'graphiql-rails', '~> 1.10'
 end
 
 group :development, :test do

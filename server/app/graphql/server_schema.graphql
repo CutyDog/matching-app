@@ -1,0 +1,11 @@
+type Mutation {
+  sample(name: String!): String!
+}
+
+type Query {
+  sample(name: String!): String!
+}
+
+type Subscription {
+  sample(name: String!): String!
+}
