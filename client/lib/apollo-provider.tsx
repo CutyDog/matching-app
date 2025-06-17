@@ -1,7 +1,7 @@
 'use client';
 
 import { ApolloProvider } from '@apollo/client';
-import { client } from './apollo-client';
+import { client } from '../graphql/client';
 
 export function ApolloWrapper({ children }: { children: React.ReactNode }) {
   return (
