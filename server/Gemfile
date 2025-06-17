@@ -42,6 +42,7 @@ gem 'graphql'
 
 group :development do
   gem 'annotaterb'
+  gem 'graphiql-rails', '~> 1.10'
 end
 
 group :development, :test do
