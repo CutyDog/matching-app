@@ -22,8 +22,16 @@ class User < ApplicationRecord
   has_secure_password
 
   has_one :profile, dependent: :destroy
-  has_many :sent_likes, class_name: 'Like', foreign_key: :sender_id, dependent: :destroy, inverse_of: :sender
-  has_many :received_likes, class_name: 'Like', foreign_key: :receiver_id, dependent: :destroy, inverse_of: :receiver
+
+  has_many :active_likes, -> { accepted.invert_where }, class_name: 'Like', foreign_key: :sender_id
+  has_many :passive_likes, -> { pending }, class_name: 'Like', foreign_key: :receiver_id
+  has_many :active_liked_users, through: :active_likes, source: :receiver
+  has_many :passive_liked_users, through: :passive_likes, source: :sender
+
+  has_many :active_matches, -> { accepted }, class_name: 'Like', foreign_key: :sender_id
+  has_many :passive_matches, -> { accepted }, class_name: 'Like', foreign_key: :receiver_id
+  has_many :active_matched_users, through: :active_matches, source: :receiver
+  has_many :passive_matched_users, through: :passive_matches, source: :sender
 
   validates :name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
@@ -50,9 +58,5 @@ class User < ApplicationRecord
     payload = { user_id: id, exp: 6.hours.from_now.to_i }
     secret_key = Rails.application.credentials.secret_key_base
     JWT.encode(payload, secret_key)
-  end
-
-  def admin?
-    admin
   end
 end

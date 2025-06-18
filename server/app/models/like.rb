@@ -3,7 +3,8 @@
 # Table name: likes
 #
 #  id          :bigint           not null, primary key
-#  status      :integer          default(0), not null
+#  accepted_at :datetime
+#  status      :integer          default("pending"), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  receiver_id :bigint           not null
@@ -20,12 +21,13 @@
 #  fk_rails_...  (sender_id => users.id)
 #
 class Like < ApplicationRecord
-  belongs_to :sender, class_name: 'User', inverse_of: :sent_likes
-  belongs_to :receiver, class_name: 'User', inverse_of: :received_likes
+  belongs_to :sender, class_name: 'User', dependent: :destroy
+  belongs_to :receiver, class_name: 'User', dependent: :destroy
 
   validates :sender_id, uniqueness: { scope: :receiver_id }
   validate :different_users
   validate :unique_combination
+  validates :accepted_at, presence: true, if: -> { status == 'accepted' }
 
   enum :status, { pending: 0, accepted: 1, rejected: 2 }
 
@@ -36,9 +38,9 @@ class Like < ApplicationRecord
   end
 
   def unique_combination
+    return unless Like.where(sender_id: receiver_id, receiver_id: sender_id).count.positive?
+
     # 逆向きのいいねが存在する場合はエラー
-    if Like.where(sender_id: receiver_id, receiver_id: sender_id).count > 0
-      errors.add(:receiver_id, 'このユーザーから既にいいねされてるため、こちらからいいねできません')
-    end
+    errors.add(:receiver_id, 'このユーザーから既にいいねされてるため、こちらからいいねできません')
   end
 end

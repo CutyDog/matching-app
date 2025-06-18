@@ -24,7 +24,7 @@ module Types
       return true unless @require_admin
 
       # admin のみアクセス可能
-      ctx[:current_user]&.admin?
+      ctx[:current_user]&.admin
     end
 
     def filter_require_himself(ctx, obj)

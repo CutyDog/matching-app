@@ -33,6 +33,79 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_inclusion_of(:admin).in_array([true, false]) }
   end
 
+  describe 'associations' do
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
+
+    it { is_expected.to have_many(:active_likes).class_name('Like').with_foreign_key(:sender_id) }
+    it { is_expected.to have_many(:passive_likes).class_name('Like').with_foreign_key(:receiver_id) }
+    it { is_expected.to have_many(:active_liked_users).class_name('User').through(:active_likes).source(:receiver) }
+    it { is_expected.to have_many(:passive_liked_users).class_name('User').through(:passive_likes).source(:sender) }
+    it { is_expected.to have_many(:active_matches).class_name('Like').with_foreign_key(:sender_id) }
+    it { is_expected.to have_many(:passive_matches).class_name('Like').with_foreign_key(:receiver_id) }
+    it { is_expected.to have_many(:active_matched_users).class_name('User').through(:active_matches).source(:receiver) }
+    it { is_expected.to have_many(:passive_matched_users).class_name('User').through(:passive_matches).source(:sender) }
+
+    describe 'active_likes' do
+      context 'when the like is accepted' do
+        let!(:like) { create(:like, :accepted, sender: user, receiver: other_user) }
+        it { expect(user.active_likes).to be_empty }
+      end
+
+      context 'when the like is pending' do
+        let!(:like) { create(:like, :pending, sender: user, receiver: other_user) }
+        it { expect(user.active_likes).to include(like) }
+      end
+    end
+
+    describe 'passive_likes' do
+      context 'when the like is accepted' do
+        let!(:like) { create(:like, :accepted, sender: other_user, receiver: user) }
+        it { expect(user.passive_likes).to be_empty }
+      end
+
+      context 'when the like is pending' do
+        let!(:like) { create(:like, :pending, sender: other_user, receiver: user) }
+        it { expect(user.passive_likes).to include(like) }
+      end
+
+      context 'when the like is rejected' do
+        let!(:like) { create(:like, :rejected, sender: user, receiver: other_user) }
+        it { expect(user.passive_likes).to be_empty }
+      end
+    end
+
+    describe 'active_liked_users' do
+      let!(:like) { create(:like, :pending, sender: user, receiver: other_user) }
+      it { expect(user.active_liked_users).to include(other_user) }
+    end
+
+    describe 'passive_liked_users' do
+      let!(:like) { create(:like, :pending, sender: other_user, receiver: user) }
+      it { expect(user.passive_liked_users).to include(other_user) }
+    end
+
+    describe 'active_matches' do
+      let!(:like) { create(:like, :accepted, sender: user, receiver: other_user) }
+      it { expect(user.active_matches).to include(like) }
+    end
+
+    describe 'passive_matches' do
+      let!(:like) { create(:like, :accepted, sender: other_user, receiver: user) }
+      it { expect(user.passive_matches).to include(like) }
+    end
+
+    describe 'active_matched_users' do
+      let!(:like) { create(:like, :accepted, sender: user, receiver: other_user) }
+      it { expect(user.active_matched_users).to include(other_user) }
+    end
+
+    describe 'passive_matched_users' do
+      let!(:like) { create(:like, :accepted, sender: other_user, receiver: user) }
+      it { expect(user.passive_matched_users).to include(other_user) }
+    end
+  end
+
   describe '.authentication' do
     subject { user.authenticate(password) }
 

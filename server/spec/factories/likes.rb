@@ -3,7 +3,8 @@
 # Table name: likes
 #
 #  id          :bigint           not null, primary key
-#  status      :integer          default(0), not null
+#  accepted_at :datetime
+#  status      :integer          default("pending"), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  receiver_id :bigint           not null
@@ -23,5 +24,6 @@ FactoryBot.define do
   factory :like do
     association :sender, factory: :user
     association :receiver, factory: :user
+    accepted_at { Time.current }
   end
 end

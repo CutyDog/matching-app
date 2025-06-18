@@ -69,11 +69,14 @@ type Subscription {
 }
 
 type User {
+  activeLikedUsers: [User!]
   createdAt: ISO8601DateTime!
   email: String!
   id: ID!
   lastLoginAt: ISO8601DateTime
+  matchers: [User!]
   name: String!
+  passiveLikedUsers: [User!]
   passwordDigest: String!
   profile: Profile
   status: StatusEnum!

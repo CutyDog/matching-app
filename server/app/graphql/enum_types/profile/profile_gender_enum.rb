@@ -1,6 +1,6 @@
 module EnumTypes
   module Profile
-    class GenderEnum < ::Types::BaseEnum
+    class ProfileGenderEnum < ::Types::BaseEnum
       value 'MALE', value: 'male'
       value 'FEMALE', value: 'female'
       value 'OTHER', value: 'other'
