@@ -21,5 +21,11 @@
 require 'rails_helper'
 
 RSpec.describe Profile, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+    subject { build(:profile) }
+
+    it { is_expected.to validate_presence_of(:birthday) }
+    it { is_expected.to define_enum_for(:gender).with_values(male: 0, female: 1, other: 2) }
+    it { is_expected.to belong_to(:user) }
+  end
 end

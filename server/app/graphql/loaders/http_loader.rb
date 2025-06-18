@@ -62,7 +62,7 @@ module Loaders
       end
     end
 
-  private
+    private
 
     def pool
       @pool ||= ConnectionPool.new(size: @size, timeout: @timeout) do

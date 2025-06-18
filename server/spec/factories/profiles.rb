@@ -20,6 +20,8 @@
 #
 FactoryBot.define do
   factory :profile do
-    
+    birthday { Faker::Date.birthday(min_age: 18, max_age: 65) }
+
+    user
   end
 end

@@ -18,7 +18,6 @@ module Types
       ids.map { |id| context.schema.object_from_id(id, context) }
     end
 
-
     field :sample, resolver: Resolvers::Sample
     field :current_account, resolver: Resolvers::User::CurrentAccount
   end
