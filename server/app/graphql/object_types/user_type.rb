@@ -9,5 +9,12 @@ module ObjectTypes
     field :email, String, null: false
     field :password_digest, String, null: false
     field :last_login_at, GraphQL::Types::ISO8601DateTime
+    field :status, EnumTypes::User::StatusEnum, null: false
+
+    field :profile, ObjectTypes::ProfileType, null: true
+
+    def profile
+      Loaders::AssociationLoader.for(User, :profile).load(object)
+    end
   end
 end
