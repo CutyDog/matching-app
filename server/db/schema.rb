@@ -23,12 +23,12 @@ ActiveRecord::Schema[8.0].define(version: 0) do
   end
 
   create_table "matches", force: :cascade do |t|
-    t.bigint "user_1_id", null: false
-    t.bigint "user_2_id", null: false
     t.datetime "matched_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_1_id", "user_2_id"], name: "index_matches_on_user_1_id_and_user_2_id", unique: true
+    t.bigint "user1_id", null: false
+    t.bigint "user2_id", null: false
+    t.index ["user1_id", "user2_id"], name: "index_matches_on_user1_id_and_user2_id", unique: true
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -57,7 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 0) do
 
   add_foreign_key "likes", "users", column: "receiver_id"
   add_foreign_key "likes", "users", column: "sender_id"
-  add_foreign_key "matches", "users", column: "user_1_id"
-  add_foreign_key "matches", "users", column: "user_2_id"
+  add_foreign_key "matches", "users", column: "user1_id"
+  add_foreign_key "matches", "users", column: "user2_id"
   add_foreign_key "profiles", "users"
 end

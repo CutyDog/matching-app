@@ -24,7 +24,7 @@ RSpec.describe Resolvers::User::CurrentAccount, type: :request do
     let(:user) { create(:user, :with_profile) }
     let(:headers) { signed_in_header(user) }
 
-    it 'returns the current user' do
+    it 'returns the current user' do # rubocop:disable RSpec/ExampleLength
       subject
       expect(response_errors).to be_nil
       expect(response_data['currentAccount']['id']).to eq user.id.to_s

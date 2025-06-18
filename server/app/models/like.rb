@@ -18,8 +18,8 @@
 #  fk_rails_...  (sender_id => users.id)
 #
 class Like < ApplicationRecord
-  belongs_to :sender, class_name: 'User', foreign_key: :sender_id
-  belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id
+  belongs_to :sender, class_name: 'User', inverse_of: :sent_likes
+  belongs_to :receiver, class_name: 'User', inverse_of: :received_likes
 
   validates :sender_id, uniqueness: { scope: :receiver_id }
 end
