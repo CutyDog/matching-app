@@ -16,10 +16,11 @@ ActiveRecord::Schema[8.0].define(version: 0) do
 
   create_table "profiles", force: :cascade do |t|
     t.date "birthday", null: false
-    t.string "gender", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.integer "gender", default: 0, null: false
+    t.index ["gender"], name: "index_profiles_on_gender"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
@@ -30,7 +31,8 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.string "email", null: false
     t.string "password_digest", null: false
     t.datetime "last_login_at"
-    t.string "status", default: "active", null: false
+    t.boolean "admin", default: false, null: false
+    t.integer "status", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["name"], name: "index_users_on_name", unique: true
     t.index ["status"], name: "index_users_on_status"
