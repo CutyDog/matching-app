@@ -47,7 +47,8 @@ RSpec.describe Like, type: :model do
 
     context 'when a like already exists in reverse order' do
       let(:like) { build(:like, sender:, receiver:) }
-      let!(:already_liked) { create(:like, sender: receiver, receiver: sender) }
+
+      before { create(:like, sender: receiver, receiver: sender) }
 
       it 'is invalid' do
         expect(like).not_to be_valid

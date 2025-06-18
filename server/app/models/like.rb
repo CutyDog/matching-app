@@ -21,8 +21,8 @@
 #  fk_rails_...  (sender_id => users.id)
 #
 class Like < ApplicationRecord
-  belongs_to :sender, class_name: 'User', dependent: :destroy
-  belongs_to :receiver, class_name: 'User', dependent: :destroy
+  belongs_to :sender, class_name: 'User'
+  belongs_to :receiver, class_name: 'User'
 
   validates :sender_id, uniqueness: { scope: :receiver_id }
   validate :different_users
