@@ -1,11 +1,54 @@
+enum GenderEnum {
+  FEMALE
+  MALE
+  OTHER
+}
+
+"""
+An ISO 8601-encoded date
+"""
+scalar ISO8601Date @specifiedBy(url: "https://tools.ietf.org/html/rfc3339")
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime @specifiedBy(url: "https://tools.ietf.org/html/rfc3339")
+
 type Mutation {
   sample(name: String!): String!
 }
 
+type Profile {
+  birthday: ISO8601Date!
+  createdAt: ISO8601DateTime!
+  gender: GenderEnum!
+  id: ID!
+  updatedAt: ISO8601DateTime!
+  user: User!
+}
+
 type Query {
+  currentAccount: User
   sample(name: String!): String!
+}
+
+enum StatusEnum {
+  ACTIVE
+  INACTIVE
 }
 
 type Subscription {
   sample(name: String!): String!
+}
+
+type User {
+  createdAt: ISO8601DateTime!
+  email: String!
+  id: ID!
+  lastLoginAt: ISO8601DateTime
+  name: String!
+  passwordDigest: String!
+  profile: Profile
+  status: StatusEnum!
+  updatedAt: ISO8601DateTime!
 }
