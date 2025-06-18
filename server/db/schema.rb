@@ -19,7 +19,9 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.bigint "receiver_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0, null: false
     t.index ["sender_id", "receiver_id"], name: "index_likes_on_sender_id_and_receiver_id", unique: true
+    t.index ["status"], name: "index_likes_on_status"
   end
 
   create_table "matches", force: :cascade do |t|

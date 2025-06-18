@@ -15,6 +15,8 @@ RSpec.describe Resolvers::User::CurrentAccount, type: :request do
             birthday
             gender
           }
+          matches {
+          }
         }
       }
     GRAPHQL

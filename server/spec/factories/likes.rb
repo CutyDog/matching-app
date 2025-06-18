@@ -3,6 +3,7 @@
 # Table name: likes
 #
 #  id          :bigint           not null, primary key
+#  status      :integer          default(0), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  receiver_id :bigint           not null
@@ -11,6 +12,7 @@
 # Indexes
 #
 #  index_likes_on_sender_id_and_receiver_id  (sender_id,receiver_id) UNIQUE
+#  index_likes_on_status                     (status)
 #
 # Foreign Keys
 #

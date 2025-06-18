@@ -24,8 +24,6 @@ class User < ApplicationRecord
   has_one :profile, dependent: :destroy
   has_many :sent_likes, class_name: 'Like', foreign_key: :sender_id, dependent: :destroy, inverse_of: :sender
   has_many :received_likes, class_name: 'Like', foreign_key: :receiver_id, dependent: :destroy, inverse_of: :receiver
-  has_many :matches_as_user1, class_name: 'Match', foreign_key: :user1_id, dependent: :destroy, inverse_of: :user1
-  has_many :matches_as_user2, class_name: 'Match', foreign_key: :user2_id, dependent: :destroy, inverse_of: :user2
 
   validates :name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
@@ -56,9 +54,5 @@ class User < ApplicationRecord
 
   def admin?
     admin
-  end
-
-  def matches
-    matches_as_user1.or(matches_as_user2)
   end
 end
