@@ -5,9 +5,9 @@ module ObjectTypes
     field :id, ID, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :name, String, null: false
-    field :email, String, null: false
-    field :password_digest, String, null: false
+    field :name, String, null: false, require_himself: true
+    field :email, String, null: false, require_himself: true
+    field :password_digest, String, null: false, require_himself: true
     field :last_login_at, GraphQL::Types::ISO8601DateTime
     field :status, EnumTypes::User::StatusEnum, null: false
 
