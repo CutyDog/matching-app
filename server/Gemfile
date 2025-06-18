@@ -39,6 +39,7 @@ gem 'ridgepole', '~> 3.0'
 gem 'bcrypt'
 gem 'jwt'
 gem 'graphql'
+gem 'graphql-batch'
 
 group :development do
   gem 'annotaterb'

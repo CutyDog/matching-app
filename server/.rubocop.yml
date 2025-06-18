@@ -12,6 +12,8 @@ Style/Documentation:
   Enabled: false
 RSpec/NamedSubject:
   Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
 
 AllCops:
   Exclude:

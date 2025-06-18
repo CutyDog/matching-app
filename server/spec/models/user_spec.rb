@@ -3,27 +3,34 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  admin           :boolean          default(FALSE), not null
 #  email           :string           not null
 #  last_login_at   :datetime
 #  name            :string           not null
 #  password_digest :string           not null
+#  status          :integer          default("active"), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
 # Indexes
 #
-#  index_users_on_email  (email) UNIQUE
-#  index_users_on_name   (name) UNIQUE
+#  index_users_on_email   (email) UNIQUE
+#  index_users_on_name    (name) UNIQUE
+#  index_users_on_status  (status)
 #
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'validations' do
+    subject { build(:user) }
+
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_uniqueness_of(:name) }
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_uniqueness_of(:email) }
     it { is_expected.to validate_presence_of(:password) }
+    it { is_expected.to define_enum_for(:status).with_values(active: 0, inactive: 1) }
+    it { is_expected.to validate_inclusion_of(:admin).in_array([true, false]) }
   end
 
   describe '.authentication' do

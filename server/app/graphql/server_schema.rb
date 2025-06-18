@@ -5,8 +5,7 @@ class ServerSchema < GraphQL::Schema
   query(Types::QueryType)
   subscription(Types::SubscriptionType)
 
-  # For batch-loading (see https://graphql-ruby.org/dataloader/overview.html)
-  use GraphQL::Dataloader
+  use GraphQL::Batch
 
   # rubocop:disable Lint/UnusedMethodArgument, Lint/UselessMethodDefinition
 

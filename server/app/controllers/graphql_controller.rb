@@ -16,12 +16,6 @@ class GraphqlController < ApplicationController
 
   private
 
-  def current_user
-    @current_user ||= User.find_by_jwt!(jwt_token)
-  rescue User::UnauthorizedError
-    nil
-  end
-
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param) # rubocop:disable Metrics/MethodLength
     case variables_param
