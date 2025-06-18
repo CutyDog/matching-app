@@ -1,2 +1,4 @@
 require 'users.schema.rb'
 require 'profiles.schema.rb'
+require 'likes.schema.rb'
+require 'matches.schema.rb'

@@ -14,6 +14,23 @@ ActiveRecord::Schema[8.0].define(version: 0) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
+  create_table "likes", force: :cascade do |t|
+    t.bigint "sender_id", null: false
+    t.bigint "receiver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sender_id", "receiver_id"], name: "index_likes_on_sender_id_and_receiver_id", unique: true
+  end
+
+  create_table "matches", force: :cascade do |t|
+    t.bigint "user_1_id", null: false
+    t.bigint "user_2_id", null: false
+    t.datetime "matched_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_1_id", "user_2_id"], name: "index_matches_on_user_1_id_and_user_2_id", unique: true
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.date "birthday", null: false
     t.datetime "created_at", null: false
@@ -38,5 +55,9 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.index ["status"], name: "index_users_on_status"
   end
 
+  add_foreign_key "likes", "users", column: "receiver_id"
+  add_foreign_key "likes", "users", column: "sender_id"
+  add_foreign_key "matches", "users", column: "user_1_id"
+  add_foreign_key "matches", "users", column: "user_2_id"
   add_foreign_key "profiles", "users"
 end

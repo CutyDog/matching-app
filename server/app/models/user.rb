@@ -22,6 +22,10 @@ class User < ApplicationRecord
   has_secure_password
 
   has_one :profile, dependent: :destroy
+  has_many :sent_likes, class_name: 'Like', foreign_key: :sender_id, dependent: :destroy
+  has_many :received_likes, class_name: 'Like', foreign_key: :receiver_id, dependent: :destroy
+  has_many :sent_matches, class_name: 'Match', foreign_key: :user_1_id, dependent: :destroy
+  has_many :received_matches, class_name: 'Match', foreign_key: :user_2_id, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
@@ -52,5 +56,9 @@ class User < ApplicationRecord
 
   def admin?
     admin
+  end
+
+  def matches
+    sent_matches.or(received_matches)
   end
 end
