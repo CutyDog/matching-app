@@ -23,5 +23,15 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.email }
     password { Faker::Internet.password }
+
+    trait :with_profile do
+      transient do
+        profile_attributes { {} }
+      end
+
+      after(:create) do |user, evaluator|
+        create(:profile, user:, **evaluator.profile_attributes)
+      end
+    end
   end
 end
