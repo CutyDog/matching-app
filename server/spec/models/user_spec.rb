@@ -7,13 +7,15 @@
 #  last_login_at   :datetime
 #  name            :string           not null
 #  password_digest :string           not null
+#  status          :string           default("active"), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
 # Indexes
 #
-#  index_users_on_email  (email) UNIQUE
-#  index_users_on_name   (name) UNIQUE
+#  index_users_on_email   (email) UNIQUE
+#  index_users_on_name    (name) UNIQUE
+#  index_users_on_status  (status)
 #
 require 'rails_helper'
 

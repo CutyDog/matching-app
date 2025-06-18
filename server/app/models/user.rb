@@ -7,20 +7,30 @@
 #  last_login_at   :datetime
 #  name            :string           not null
 #  password_digest :string           not null
+#  status          :string           default("active"), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
 # Indexes
 #
-#  index_users_on_email  (email) UNIQUE
-#  index_users_on_name   (name) UNIQUE
+#  index_users_on_email   (email) UNIQUE
+#  index_users_on_name    (name) UNIQUE
+#  index_users_on_status  (status)
 #
 class User < ApplicationRecord
   has_secure_password
 
+  has_one :profile, dependent: :destroy
+
   validates :name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true
+  validates :status, presence: true
+
+  enum status: {
+    active: 'active',
+    inactive: 'inactive'
+  }
 
   class UnauthorizedError < StandardError; end
 
