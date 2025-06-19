@@ -16,10 +16,10 @@ services:
 
   server:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ./server
+      dockerfile: Dockerfile
     volumes:
-      - .:/rails
+      - ./server:/rails
       - bundle_cache:/rails/vendor/bundle
     ports:
       - "3010:80"
