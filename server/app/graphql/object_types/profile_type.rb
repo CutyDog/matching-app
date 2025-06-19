@@ -4,7 +4,8 @@ module ObjectTypes
   class ProfileType < ::Types::BaseObject
     field :id, ID, null: false
     field :birthday, GraphQL::Types::ISO8601Date, null: false
-    field :gender, EnumTypes::Profile::GenderEnum, null: false
+    field :gender, EnumTypes::Profile::ProfileGenderEnum, null: false
+    field :introduction, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

@@ -23,25 +23,41 @@ class User < ApplicationRecord
 
   has_one :profile, dependent: :destroy
 
+  has_many :active_likes, -> { accepted.invert_where }, class_name: 'Like', foreign_key: :sender_id, dependent: :destroy, inverse_of: :sender
+  has_many :passive_likes, -> { pending }, class_name: 'Like', foreign_key: :receiver_id, dependent: :destroy, inverse_of: :receiver
+  has_many :active_liked_users, through: :active_likes, source: :receiver
+  has_many :passive_liked_users, through: :passive_likes, source: :sender
+
+  has_many :active_matches, -> { accepted }, class_name: 'Like', foreign_key: :sender_id, dependent: :destroy, inverse_of: :sender
+  has_many :passive_matches, -> { accepted }, class_name: 'Like', foreign_key: :receiver_id, dependent: :destroy, inverse_of: :receiver
+  has_many :active_matched_users, through: :active_matches, source: :receiver
+  has_many :passive_matched_users, through: :passive_matches, source: :sender
+
   validates :name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
-  validates :password, presence: true
+  validates :password, presence: true, if: -> { password_digest.blank? }
   validates :admin, inclusion: { in: [true, false] }
 
   enum :status, { active: 0, inactive: 1 }
 
   class UnauthorizedError < StandardError; end
 
-  def self.find_by_jwt!(jwt_token)
-    secret_key = Rails.application.credentials.secret_key_base
-    payload = JWT.decode(jwt_token, secret_key)[0]
-    User.find(payload['user_id'])
-  rescue JWT::ExpiredSignature
-    raise UnauthorizedError, 'JWT token expired'
-  rescue JWT::DecodeError
-    raise UnauthorizedError, 'Invalid JWT token'
-  rescue ActiveRecord::RecordNotFound
-    raise UnauthorizedError, 'User not found'
+  class << self
+    def find_by_jwt!(jwt_token)
+      secret_key = Rails.application.credentials.secret_key_base
+      payload = JWT.decode(jwt_token, secret_key)[0]
+      User.find(payload['user_id'])
+    rescue JWT::ExpiredSignature
+      raise UnauthorizedError, 'JWT token expired'
+    rescue JWT::DecodeError
+      raise UnauthorizedError, 'Invalid JWT token'
+    rescue ActiveRecord::RecordNotFound
+      raise UnauthorizedError, 'User not found'
+    end
+
+    def sign_up!(name:, email:, password:)
+      create!(name:, email:, password:, last_login_at: Time.current)
+    end
   end
 
   def issue_jwt_token
@@ -50,7 +66,9 @@ class User < ApplicationRecord
     JWT.encode(payload, secret_key)
   end
 
-  def admin?
-    admin
+  def sign_in!(password)
+    raise UnauthorizedError, 'Invalid email or password' unless authenticate(password)
+
+    update!(last_login_at: Time.current)
   end
 end

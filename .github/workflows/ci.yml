@@ -29,26 +29,32 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-diff
     if: needs.check-diff.outputs.has-changed-frontend-files == 'true'
+    defaults:
+      run:
+        working-directory: ./client
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       # - name: Install dependencies
-      #   if: steps.diff.outputs.diff-count > 0
       #   working-directory: ./client
       #   run: npm install
   backend:
     runs-on: ubuntu-latest
     needs: check-diff
     if: needs.check-diff.outputs.has-changed-backend-files == 'true'
+    defaults:
+      run:
+        working-directory: ./server
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/server/Gemfile
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.4.3
           bundler-cache: true
       - name: Run RuboCop
-        if: steps.diff.outputs.diff-count > 0
         working-directory: ./server
         run: bundle exec rubocop

@@ -1,6 +1,6 @@
 module RequestSpecSupport
   def post_graphql(query, variables: {}, headers: {})
-    post '/graphql', params: { query:, variables: }, headers:
+    post '/graphql', params: { query:, variables: }, headers:, as: :json
   end
 
   def response_body
