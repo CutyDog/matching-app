@@ -49,6 +49,5 @@ jobs:
           ruby-version: 3.4.3
           bundler-cache: true
       - name: Run RuboCop
-        if: steps.diff.outputs.diff-count > 0
         working-directory: ./server
         run: bundle exec rubocop
