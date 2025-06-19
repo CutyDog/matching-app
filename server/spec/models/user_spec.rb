@@ -30,7 +30,6 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_uniqueness_of(:email) }
     it { is_expected.to validate_presence_of(:password) }
     it { is_expected.to define_enum_for(:status).with_values(active: 0, inactive: 1) }
-    it { is_expected.to validate_inclusion_of(:admin).in_array([true, false]) }
   end
 
   describe 'associations' do

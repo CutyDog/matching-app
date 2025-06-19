@@ -28,9 +28,9 @@ RSpec.describe Mutations::Profiles::UpdateProfile, type: :request do
       {
         updateProfile: {
           profile: {
-            id: user.profile.id.to_s,
+            id: profile.id.to_s,
             birthday: '2000-01-01',
-            gender: user.profile.gender.upcase,
+            gender: profile.gender.upcase,
             introduction: 'update test'
           }
         }

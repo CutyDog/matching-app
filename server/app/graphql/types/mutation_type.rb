@@ -10,8 +10,8 @@ module Types
     field :create_profile, mutation: Mutations::Profiles::CreateProfile
     field :update_profile, mutation: Mutations::Profiles::UpdateProfile
 
-    # field :like, mutation: Mutations::Likes::CreateLike
-    # field :accept_like, mutation: Mutations::Likes::AcceptLike
-    # field :reject_like, mutation: Mutations::Likes::RejectLike
+    field :send_like, mutation: Mutations::Likes::SendLike
+    field :accept_like, mutation: Mutations::Likes::AcceptLike
+    field :reject_like, mutation: Mutations::Likes::RejectLike
   end
 end

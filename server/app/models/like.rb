@@ -31,6 +31,10 @@ class Like < ApplicationRecord
 
   enum :status, { pending: 0, accepted: 1, rejected: 2 }
 
+  def accept!
+    update!(status: :accepted, accepted_at: Time.current)
+  end
+
   private
 
   def different_users
