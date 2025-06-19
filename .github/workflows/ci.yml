@@ -46,7 +46,7 @@ jobs:
       run:
         working-directory: ./server
     env:
-      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
+      BUNDLE_GEMFILE: ${{ github.workspace }}/server/Gemfile
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
