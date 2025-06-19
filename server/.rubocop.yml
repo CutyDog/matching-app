@@ -16,6 +16,12 @@ RSpec/MultipleExpectations:
   Enabled: false
 RSpec/NestedGroups:
   Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/AnyInstance:
+  Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
 
 AllCops:
   Exclude:

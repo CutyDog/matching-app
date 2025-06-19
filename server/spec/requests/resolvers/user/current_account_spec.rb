@@ -18,10 +18,18 @@ RSpec.describe Resolvers::User::CurrentAccount, type: :request do
           activeLikes {
             id
             status
+            receiver {
+              id
+              name
+            }
           }
           passiveLikes {
             id
             status
+            sender {
+              id
+              name
+            }
           }
           matches {
             id
@@ -37,19 +45,64 @@ RSpec.describe Resolvers::User::CurrentAccount, type: :request do
   end
 
   let(:user) { create(:user, :with_profile) }
+  let(:active_like_user) { create(:user) }
+  let!(:active_like) { create(:like, :pending, sender: user, receiver: active_like_user) }
+  let(:passive_like_user) { create(:user) }
+  let!(:passive_like) { create(:like, :pending, sender: passive_like_user, receiver: user) }
+  let(:matched_user) { create(:user) }
+  let!(:matched_like) { create(:like, :accepted, sender: user, receiver: matched_user) }
 
   context 'when user is signed in' do
     let(:headers) { signed_in_header(user) }
+    let(:expected_data) do
+      {
+        currentAccount: {
+          id: user.id.to_s,
+          name: user.name,
+          status: user.status.upcase,
+          profile: {
+            id: user.profile.id.to_s,
+            birthday: user.profile.birthday.to_s,
+            gender: user.profile.gender.upcase
+          },
+          activeLikes: [
+            {
+              id: active_like.id.to_s,
+              status: active_like.status.upcase,
+              receiver: {
+                id: active_like_user.id.to_s,
+                name: active_like_user.name
+              }
+            }
+          ],
+          passiveLikes: [
+            {
+              id: passive_like.id.to_s,
+              status: passive_like.status.upcase,
+              sender: {
+                id: passive_like_user.id.to_s,
+                name: passive_like_user.name
+              }
+            }
+          ],
+          matches: [
+            {
+              id: matched_like.id.to_s,
+              status: matched_like.status.upcase,
+              partner: {
+                id: matched_user.id.to_s,
+                name: matched_user.name
+              }
+            }
+          ]
+        }
+      }
+    end
 
-    it 'returns the current user' do # rubocop:disable RSpec/ExampleLength
+    it 'returns the current user' do
       subject
       expect(response_errors).to be_nil
-      expect(response_data['currentAccount']['id']).to eq user.id.to_s
-      expect(response_data['currentAccount']['name']).to eq user.name
-      expect(response_data['currentAccount']['status']).to eq user.status.upcase
-      expect(response_data['currentAccount']['profile']['id']).to eq user.profile.id.to_s
-      expect(response_data['currentAccount']['profile']['birthday']).to eq user.profile.birthday.to_s
-      expect(response_data['currentAccount']['profile']['gender']).to eq user.profile.gender.upcase
+      expect(response_data.deep_symbolize_keys).to eq expected_data
     end
   end
 
@@ -60,20 +113,6 @@ RSpec.describe Resolvers::User::CurrentAccount, type: :request do
       subject
       expect(response_errors).to be_present
       expect(response_errors.first['message']).to eq 'login required!!'
-    end
-  end
-
-  context 'when matched partner exists' do
-    let(:headers) { signed_in_header(user) }
-    let(:other_user) { create(:user) }
-    let!(:like) { create(:like, :accepted, sender: user, receiver: other_user) }
-
-    it 'returns the matched partner' do
-      subject
-      expect(response_errors).to be_nil
-      expect(response_data['currentAccount']['matches'][0]['status']).to eq like.status.upcase
-      expect(response_data['currentAccount']['matches'][0]['partner']['id']).to eq other_user.id.to_s
-      expect(response_data['currentAccount']['matches'][0]['partner']['name']).to eq other_user.name
     end
   end
 end

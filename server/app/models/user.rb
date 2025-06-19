@@ -35,28 +35,40 @@ class User < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
-  validates :password, presence: true
+  validates :password, presence: true, if: -> { password_digest.blank? }
   validates :admin, inclusion: { in: [true, false] }
 
   enum :status, { active: 0, inactive: 1 }
 
   class UnauthorizedError < StandardError; end
 
-  def self.find_by_jwt!(jwt_token)
-    secret_key = Rails.application.credentials.secret_key_base
-    payload = JWT.decode(jwt_token, secret_key)[0]
-    User.find(payload['user_id'])
-  rescue JWT::ExpiredSignature
-    raise UnauthorizedError, 'JWT token expired'
-  rescue JWT::DecodeError
-    raise UnauthorizedError, 'Invalid JWT token'
-  rescue ActiveRecord::RecordNotFound
-    raise UnauthorizedError, 'User not found'
+  class << self
+    def find_by_jwt!(jwt_token)
+      secret_key = Rails.application.credentials.secret_key_base
+      payload = JWT.decode(jwt_token, secret_key)[0]
+      User.find(payload['user_id'])
+    rescue JWT::ExpiredSignature
+      raise UnauthorizedError, 'JWT token expired'
+    rescue JWT::DecodeError
+      raise UnauthorizedError, 'Invalid JWT token'
+    rescue ActiveRecord::RecordNotFound
+      raise UnauthorizedError, 'User not found'
+    end
+
+    def sign_up!(name:, email:, password:)
+      create!(name:, email:, password:, last_login_at: Time.current)
+    end
   end
 
   def issue_jwt_token
     payload = { user_id: id, exp: 6.hours.from_now.to_i }
     secret_key = Rails.application.credentials.secret_key_base
     JWT.encode(payload, secret_key)
+  end
+
+  def sign_in!(password)
+    raise UnauthorizedError, 'Invalid email or password' unless authenticate(password)
+
+    update!(last_login_at: Time.current)
   end
 end

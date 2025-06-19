@@ -7,6 +7,13 @@ class ServerSchema < GraphQL::Schema
 
   use GraphQL::Batch
 
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    raise GraphQL::ExecutionError, e.record.errors.full_messages.join(', ')
+  end
+  rescue_from StandardError do |e|
+    raise GraphQL::ExecutionError, e.message
+  end
+
   # rubocop:disable Lint/UnusedMethodArgument, Lint/UselessMethodDefinition
 
   # GraphQL-Ruby calls this when something goes wrong while running a query:
