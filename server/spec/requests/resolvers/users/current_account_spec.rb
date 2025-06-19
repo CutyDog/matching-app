@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Resolvers::User::CurrentAccount, type: :request do
+RSpec.describe Resolvers::Users::CurrentAccount, type: :request do
   subject { post_graphql(query, headers:) }
 
   let(:query) do

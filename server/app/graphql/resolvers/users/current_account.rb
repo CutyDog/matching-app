@@ -1,5 +1,5 @@
 module Resolvers
-  module User
+  module Users
     class CurrentAccount < SignInRequiredResolver
       type ObjectTypes::UserType, null: true
 

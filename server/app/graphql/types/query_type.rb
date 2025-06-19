@@ -19,6 +19,6 @@ module Types
     end
 
     field :sample, resolver: Resolvers::Sample
-    field :current_account, resolver: Resolvers::User::CurrentAccount
+    field :current_account, resolver: Resolvers::Users::CurrentAccount
   end
 end
