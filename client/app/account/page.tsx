@@ -1,19 +1,27 @@
 'use client';
 
+import { useContext } from 'react';
+import { AuthContext } from '@/context/auth';
+import { useRouter } from 'next/navigation';
+
 export default function AccountPage() {
-  // 仮のユーザー情報
-  const user = { name: 'テストユーザー', email: 'test@example.com' };
+  const router = useRouter();
+  const { currentUser } = useContext(AuthContext);
+
+  if (!currentUser) {
+    return <div>ログインしてください</div>;
+  }
 
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">マイページ</h1>
-      <div className="mb-2">名前: {user.name}</div>
-      <div className="mb-2">メール: {user.email}</div>
+      <div className="mb-2 text-white">名前: {currentUser.name}</div>
+      <div className="mb-2">メール: {currentUser.email}</div>
       <button
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
         onClick={() => {
-          localStorage.removeItem('token');
-          window.location.href = '/login';
+          localStorage.removeItem('Token');
+          router.replace('/login');
         }}
       >
         ログアウト

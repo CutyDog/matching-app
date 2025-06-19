@@ -1,19 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '@/context/auth';
 
 export default function Home() {
   const router = useRouter();
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (token) {
+    if (currentUser) {
       router.replace('/account');
     } else {
       router.replace('/login');
     }
-  }, [router]);
+  }, [router, currentUser]);
 
   return null;
 }
