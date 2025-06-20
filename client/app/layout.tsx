@@ -31,7 +31,9 @@ export default function RootLayout({
       >
         <ApolloWrapper>
           <AuthProvider>
-            {children}
+            <div className="px-4 md:px-8 xl:px-0 max-w-screen-xl mx-auto w-full">
+              {children}
+            </div>
           </AuthProvider>
         </ApolloWrapper>
       </body>

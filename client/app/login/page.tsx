@@ -49,15 +49,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleLogin} className="p-8 rounded shadow-md w-80">
-        <h1 className="text-2xl font-bold mb-4">ログイン</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light">
+      <form onSubmit={handleLogin} className="bg-background/90 shadow-xl rounded-xl px-8 py-10 w-full max-w-md flex flex-col gap-4 border border-muted">
+        <h1 className="text-3xl font-bold text-primary text-center mb-2 tracking-tight">ログイン</h1>
+        <p className="text-foreground text-center mb-4">アカウント情報を入力してください</p>
         <input
           type="email"
           placeholder="メールアドレス"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="mb-2 w-full p-2 border rounded text-foreground"
+          className="mb-2 w-full p-3 border border-muted rounded focus:outline-none focus:ring-2 focus:ring-primary text-foreground bg-muted placeholder:text-gray-400"
           required
         />
         <input
@@ -65,11 +66,15 @@ export default function LoginPage() {
           placeholder="パスワード"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          className="mb-2 w-full p-2 border rounded text-foreground"
+          className="mb-2 w-full p-3 border border-muted rounded focus:outline-none focus:ring-2 focus:ring-primary text-foreground bg-muted placeholder:text-gray-400"
           required
         />
-        {error && <div className="text-error mb-2">{error}</div>}
-        <button type="submit" className="w-full text-foreground py-2 rounded" disabled={loading}>
+        {error && <div className="text-error text-sm mb-2 text-center">{error}</div>}
+        <button
+          type="submit"
+          className="w-full py-2 rounded bg-primary text-background font-semibold hover:bg-primary-dark transition disabled:opacity-60"
+          disabled={loading}
+        >
           {loading ? 'ログイン中...' : 'ログイン'}
         </button>
       </form>
