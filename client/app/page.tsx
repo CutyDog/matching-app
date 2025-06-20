@@ -11,8 +11,6 @@ export default function Home() {
   useEffect(() => {
     if (currentUser) {
       router.replace('/account');
-    } else {
-      router.replace('/login');
     }
   }, [router, currentUser]);
 
