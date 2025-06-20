@@ -2,12 +2,22 @@
 
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { useQuery } from "@apollo/client";
-import { CURRENT_ACCOUNT } from "@/graphql/queries/users/currentAccount";
 import { Query, User } from "@/graphql/graphql";
+import { gql } from "@apollo/client";
 
 interface IAuthContext {
   currentUser: User | null;
 }
+
+const CURRENT_ACCOUNT = gql`
+  query currentAccount {
+    currentAccount {
+      id
+      name
+      email
+    }
+  }
+`;
 
 const AuthContext = createContext<IAuthContext>({ currentUser: null });
 

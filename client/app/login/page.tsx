@@ -4,8 +4,17 @@ import { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 import { AuthContext } from '@/context/auth';
-import { SIGN_IN } from '@/graphql/mutations/auth/signIn';
 import { SignInPayload } from '@/graphql/graphql';
+import { gql } from '@apollo/client';
+
+const SIGN_IN = gql`
+  mutation signIn($email: String!, $password: String!) {
+    signIn(input: { email: $email, password: $password }) {
+      token
+    }
+  }
+`;
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
