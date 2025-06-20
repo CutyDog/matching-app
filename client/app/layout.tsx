@@ -32,10 +32,10 @@ export default function RootLayout({
       >
         <ApolloWrapper>
           <AuthProvider>
-            <div className="px-4 md:px-8 xl:px-0 max-w-screen-xl mx-auto w-full">
+            <div className="px-4 md:px-8 xl:px-0 max-w-screen-xl mx-auto w-full pb-16">
               {children}
             </div>
-            <div className="fixed bottom-0 w-full">
+            <div className="fixed bottom-0 w-full z-50">
               <Navigation />
             </div>
           </AuthProvider>
