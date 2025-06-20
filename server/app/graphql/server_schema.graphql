@@ -148,6 +148,7 @@ type Mutation {
 }
 
 type Profile {
+  avatarUrl: String!
   birthday: ISO8601Date!
   createdAt: ISO8601DateTime!
   gender: ProfileGenderEnum!

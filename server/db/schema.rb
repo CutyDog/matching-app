@@ -41,6 +41,7 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.bigint "user_id", null: false
     t.integer "gender", default: 0, null: false
     t.text "introduction"
+    t.string "avatar_url"
     t.index ["gender"], name: "index_profiles_on_gender"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
