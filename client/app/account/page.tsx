@@ -1,31 +1,113 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '@/context/auth';
-import { useRouter } from 'next/navigation';
+import { useMutation } from '@apollo/client';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
+import { gql } from '@apollo/client';
+import { Profile } from '@/graphql/graphql';
+import { TextField, TextArea } from '@/components/forms';
+import { ActionButton, SubmitButton } from '@/components/buttons';
+
+const UPDATE_PROFILE = gql`
+  mutation updateProfile($introduction: String) {
+    updateProfile(input: { introduction: $introduction }) {
+      profile {
+        id
+        introduction
+      }
+    }
+  }
+`;
 
 export default function AccountPage() {
-  const router = useRouter();
   const { currentUser } = useContext(AuthContext);
 
-  if (currentUser) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light">
-        <div className="bg-background/90 shadow-xl rounded-xl px-8 py-10 w-full max-w-md flex flex-col items-center border border-muted">
-          <h1 className="text-3xl font-bold text-primary mb-4 tracking-tight">マイページ</h1>
-          <div className="mb-2 text-foreground text-lg font-semibold">{currentUser.name}</div>
-          <div className="mb-6 text-foreground text-sm">{currentUser.email}</div>
-          <button
-            className="px-6 py-2 bg-error text-foreground font-semibold rounded hover:bg-error/80 transition"
-            onClick={() => {
-              localStorage.removeItem('Token');
-              router.replace('/login');
-            }}
-          >
-            ログアウト
-          </button>
-        </div>
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [cancelInput, setCancelInput] = useState(false);
+
+  const [updateProfile, { loading: updatingProfile }] = useMutation<{ updateProfile: { profile: Profile } }>(UPDATE_PROFILE);
+
+  useEffect(() => {
+    if (!cancelInput) return;
+
+    if (currentUser) {
+      setName(currentUser.name || '');
+      setEmail(currentUser.email || '');
+      setIntroduction(currentUser.profile?.introduction || '');
+
+      setCancelInput(false);
+    }
+  }, [currentUser, cancelInput]);
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateProfile({ variables: { introduction } });
+  };
+
+  return (
+    <div className="space-y-10 divide-y divide-gray-900/10 bg-muted -mx-4 px-4 sm:-mx-8 sm:px-8 py-10">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
+        <form onSubmit={handleSave} className="shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
+          <div className="px-4 py-6 sm:p-8">
+            <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+              <div className="mt-2 flex items-center gap-x-3">
+                <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
+                <button
+                  type="button"
+                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  変更
+                </button>
+              </div>
+
+              <TextField
+                label="名前"
+                name="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required={false}
+              />
+
+              <TextField
+                label="メールアドレス"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required={false}
+              />
+
+              <TextArea
+                label="自己紹介"
+                name="introduction"
+                rows={3}
+                value={introduction}
+                onChange={(e) => setIntroduction(e.target.value)}
+                required={false}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+            <ActionButton
+              style={{ backgroundColor: "oklch(44.6% 0.03 256.802)" }}
+              onClick={() => setCancelInput(true)}
+              disabled={updatingProfile}
+            >
+              キャンセル
+            </ActionButton>
+
+            <SubmitButton disabled={updatingProfile}>
+              保存
+            </SubmitButton>
+          </div>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
 }

@@ -7,7 +7,7 @@ import { AuthContext } from '@/context/auth';
 import { SignInPayload } from '@/graphql/graphql';
 import { gql } from '@apollo/client';
 import HeartIcon from '@/components/icons/HeartIcon'; // App Logo
-import SubmitButton from '@/components/buttons/SubmitButton';
+import { SubmitButton } from '@/components/buttons';
 
 const SIGN_IN = gql`
   mutation signIn($email: String!, $password: String!) {
