@@ -31,7 +31,20 @@ services:
     stdin_open: true
     tty: true
 
+  storage:
+    image: fsouza/fake-gcs-server
+    ports:
+      - 4443:4443
+    volumes:
+      - storage_data:/data/assets
+    environment:
+      - GCS_ENDPOINT=0.0.0.0:4443
+      - GCS_NO_AUTH=true
+      - GCS_DEBUG=true
+    command: -scheme http -public-host localhost -data /data
+
 volumes:
   postgres_data:
   bundle_cache:
   node_modules:
+  storage_data:
