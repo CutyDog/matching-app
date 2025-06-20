@@ -1,0 +1,5 @@
+---
+description: Rails coding rules
+globs: ["app/**/*.rb", "config/**/*.rb", "lib/**/*.rb", "db/**/*.rb"]
+alwaysApply: false
+---
