@@ -26,21 +26,24 @@ export default function AccountPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [introduction, setIntroduction] = useState('');
-  const [cancelInput, setCancelInput] = useState(false);
 
   const [updateProfile, { loading: updatingProfile }] = useMutation<{ updateProfile: { profile: Profile } }>(UPDATE_PROFILE);
 
   useEffect(() => {
-    if (!cancelInput) return;
-
     if (currentUser) {
       setName(currentUser.name || '');
       setEmail(currentUser.email || '');
       setIntroduction(currentUser.profile?.introduction || '');
-
-      setCancelInput(false);
     }
-  }, [currentUser, cancelInput]);
+  }, [currentUser]);
+
+  const handleCancel = () => {
+    if (!currentUser) return;
+
+    setName(currentUser.name || '');
+    setEmail(currentUser.email || '');
+    setIntroduction(currentUser.profile?.introduction || '');
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,7 +99,7 @@ export default function AccountPage() {
           <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
             <ActionButton
               style={{ backgroundColor: "oklch(44.6% 0.03 256.802)" }}
-              onClick={() => setCancelInput(true)}
+              onClick={handleCancel}
               disabled={updatingProfile}
             >
               キャンセル
