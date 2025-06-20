@@ -23,7 +23,7 @@ export default function Navigation() {
           key={href}
           href={href}
           className={`flex flex-col items-center justify-center text-xs font-medium transition-colors w-full h-full ${
-            pathname === href ? "text-primary" : "text-foreground/70 hover:text-primary"
+            pathname === href ? "text-foreground" : "text-foreground/70 hover:text-foreground"
           }`}
         >
           <Icon className="w-6 h-6" />

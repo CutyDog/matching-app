@@ -15,6 +15,7 @@ const CURRENT_ACCOUNT = gql`
       id
       name
       email
+      lastLoginAt
     }
   }
 `;
