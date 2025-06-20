@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navigation from "@/components/navigation/Navigation";
 import { ApolloWrapper } from '../lib/apollo-provider'
 import { AuthProvider } from '@/context/auth';
 
@@ -31,7 +32,12 @@ export default function RootLayout({
       >
         <ApolloWrapper>
           <AuthProvider>
-            {children}
+            <div className="px-4 md:px-8 xl:px-0 max-w-screen-xl mx-auto w-full pb-16">
+              {children}
+            </div>
+            <div className="fixed bottom-0 w-full z-50">
+              <Navigation />
+            </div>
           </AuthProvider>
         </ApolloWrapper>
       </body>

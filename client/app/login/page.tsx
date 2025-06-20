@@ -4,8 +4,18 @@ import { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 import { AuthContext } from '@/context/auth';
-import { SIGN_IN } from '@/graphql/mutations/auth/signIn';
 import { SignInPayload } from '@/graphql/graphql';
+import { gql } from '@apollo/client';
+import HeartIcon from '@/components/icons/HeartIcon'; // App Logo
+import { SubmitButton } from '@/components/buttons';
+
+const SIGN_IN = gql`
+  mutation signIn($email: String!, $password: String!) {
+    signIn(input: { email: $email, password: $password }) {
+      token
+    }
+  }
+`;
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -41,30 +51,63 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-80">
-        <h1 className="text-2xl font-bold mb-4">ログイン</h1>
-        <input
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="mb-2 w-full p-2 border rounded text-gray-500"
-          required
-        />
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          className="mb-2 w-full p-2 border rounded text-gray-500"
-          required
-        />
-        {error && <div className="text-red-500 mb-2">{error}</div>}
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded" disabled={loading}>
-          {loading ? 'ログイン中...' : 'ログイン'}
-        </button>
-      </form>
+    <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-muted">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <HeartIcon className="mx-auto h-12 w-auto text-primary" />
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">
+          Sign in to your account
+        </h2>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-background py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleLogin}>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-foreground">
+                Email address
+              </label>
+              <div className="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-foreground">
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
+                />
+              </div>
+            </div>
+
+            {error && <div className="text-sm text-error">{error}</div>}
+
+            <div>
+              <SubmitButton disabled={loading}>
+                {loading ? "Signing in..." : "Sign in"}
+              </SubmitButton>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
