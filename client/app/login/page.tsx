@@ -50,14 +50,14 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-80">
+      <form onSubmit={handleLogin} className="p-8 rounded shadow-md w-80">
         <h1 className="text-2xl font-bold mb-4">ログイン</h1>
         <input
           type="email"
           placeholder="メールアドレス"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="mb-2 w-full p-2 border rounded text-gray-500"
+          className="mb-2 w-full p-2 border rounded text-foreground"
           required
         />
         <input
@@ -65,11 +65,11 @@ export default function LoginPage() {
           placeholder="パスワード"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          className="mb-2 w-full p-2 border rounded text-gray-500"
+          className="mb-2 w-full p-2 border rounded text-foreground"
           required
         />
-        {error && <div className="text-red-500 mb-2">{error}</div>}
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded" disabled={loading}>
+        {error && <div className="text-error mb-2">{error}</div>}
+        <button type="submit" className="w-full text-foreground py-2 rounded" disabled={loading}>
           {loading ? 'ログイン中...' : 'ログイン'}
         </button>
       </form>
