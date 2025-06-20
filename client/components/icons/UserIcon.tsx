@@ -1,4 +1,8 @@
-export default function UserIcon({ className }: { className?: string }) {
+export default function UserIcon({
+  className
+}: {
+  className?: string
+}) {
   return (
     <svg
       className={className || "w-6 h-6"}
@@ -14,4 +18,4 @@ export default function UserIcon({ className }: { className?: string }) {
       />
     </svg>
   );
-} 
+}

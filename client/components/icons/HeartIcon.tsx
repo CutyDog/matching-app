@@ -14,4 +14,4 @@ export default function HeartIcon({ className }: { className?: string }) {
       />
     </svg>
   );
-} 
+}

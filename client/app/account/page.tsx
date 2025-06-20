@@ -16,7 +16,7 @@ export default function AccountPage() {
           <div className="mb-2 text-foreground text-lg font-semibold">{currentUser.name}</div>
           <div className="mb-6 text-foreground text-sm">{currentUser.email}</div>
           <button
-            className="px-6 py-2 bg-error text-background font-semibold rounded hover:bg-error/80 transition"
+            className="px-6 py-2 bg-error text-foreground font-semibold rounded hover:bg-error/80 transition"
             onClick={() => {
               localStorage.removeItem('Token');
               router.replace('/login');

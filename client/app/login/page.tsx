@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { AuthContext } from '@/context/auth';
 import { SignInPayload } from '@/graphql/graphql';
 import { gql } from '@apollo/client';
+import HeartIcon from '@/components/icons/HeartIcon'; // App Logo
 
 const SIGN_IN = gql`
   mutation signIn($email: String!, $password: String!) {
@@ -49,35 +50,67 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light">
-      <form onSubmit={handleLogin} className="bg-background/90 shadow-xl rounded-xl px-8 py-10 w-full max-w-md flex flex-col gap-4 border border-muted">
-        <h1 className="text-3xl font-bold text-primary text-center mb-2 tracking-tight">ログイン</h1>
-        <p className="text-foreground text-center mb-4">アカウント情報を入力してください</p>
-        <input
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="mb-2 w-full p-3 border border-muted rounded focus:outline-none focus:ring-2 focus:ring-primary text-foreground bg-muted placeholder:text-gray-400"
-          required
-        />
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          className="mb-2 w-full p-3 border border-muted rounded focus:outline-none focus:ring-2 focus:ring-primary text-foreground bg-muted placeholder:text-gray-400"
-          required
-        />
-        {error && <div className="text-error text-sm mb-2 text-center">{error}</div>}
-        <button
-          type="submit"
-          className="w-full py-2 rounded bg-primary text-background font-semibold hover:bg-primary-dark transition disabled:opacity-60"
-          disabled={loading}
-        >
-          {loading ? 'ログイン中...' : 'ログイン'}
-        </button>
-      </form>
+    <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-muted">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <HeartIcon className="mx-auto h-12 w-auto text-primary" />
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">
+          Sign in to your account
+        </h2>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-background py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleLogin}>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-foreground">
+                Email address
+              </label>
+              <div className="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-foreground">
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                />
+              </div>
+            </div>
+
+            {error && <div className="text-sm text-error">{error}</div>}
+
+            <div>
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-bold text-foreground shadow-sm"
+                disabled={loading}
+              >
+                {loading ? "Signing in..." : "Sign in"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
