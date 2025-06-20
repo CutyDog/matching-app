@@ -15,9 +15,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 type Documents = {
     "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n": typeof types.SignInDocument,
+    "\n  query currentAccount {\n    currentAccount {\n      id\n      name\n      lastLoginAt\n      activeLikes {\n        id\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.CurrentAccountDocument,
 };
 const documents: Documents = {
     "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n": types.SignInDocument,
+    "\n  query currentAccount {\n    currentAccount {\n      id\n      name\n      lastLoginAt\n      activeLikes {\n        id\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.CurrentAccountDocument,
 };
 
 /**
@@ -38,6 +40,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n"): (typeof documents)["\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query currentAccount {\n    currentAccount {\n      id\n      name\n      lastLoginAt\n      activeLikes {\n        id\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query currentAccount {\n    currentAccount {\n      id\n      name\n      lastLoginAt\n      activeLikes {\n        id\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
