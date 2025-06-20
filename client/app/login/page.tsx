@@ -7,6 +7,7 @@ import { AuthContext } from '@/context/auth';
 import { SignInPayload } from '@/graphql/graphql';
 import { gql } from '@apollo/client';
 import HeartIcon from '@/components/icons/HeartIcon'; // App Logo
+import SubmitButton from '@/components/buttons/SubmitButton';
 
 const SIGN_IN = gql`
   mutation signIn($email: String!, $password: String!) {
@@ -74,7 +75,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
                 />
               </div>
             </div>
@@ -92,7 +93,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
                 />
               </div>
             </div>
@@ -100,13 +101,9 @@ export default function LoginPage() {
             {error && <div className="text-sm text-error">{error}</div>}
 
             <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-bold text-foreground shadow-sm"
-                disabled={loading}
-              >
+              <SubmitButton disabled={loading}>
                 {loading ? "Signing in..." : "Sign in"}
-              </button>
+              </SubmitButton>
             </div>
           </form>
         </div>
