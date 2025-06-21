@@ -3,9 +3,11 @@ import Image from 'next/image';
 export default function AvatarImage({
   avatarUrl,
   size = 100,
+  onClick,
 }: {
   avatarUrl: string;
   size?: number;
+  onClick?: () => void;
 }) {
   return (
     <Image
@@ -14,6 +16,7 @@ export default function AvatarImage({
       width={size}
       height={size}
       className="rounded-xl"
+      onClick={onClick}
     />
   )
 }

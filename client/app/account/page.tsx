@@ -11,11 +11,10 @@ import { ActionButton, SubmitButton } from '@/components/buttons';
 import { AvatarImage } from '@/components/images';
 
 const UPDATE_PROFILE = gql`
-  mutation updateProfile($introduction: String) {
-    updateProfile(input: { introduction: $introduction }) {
+  mutation updateProfile($introduction: String, $avatarUrl: String) {
+    updateProfile(input: { introduction: $introduction, avatarUrl: $avatarUrl }) {
       profile {
         id
-        introduction
       }
     }
   }
@@ -51,7 +50,7 @@ export default function AccountPage() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile({ variables: { introduction } });
+    updateProfile({ variables: { introduction, avatarUrl } });
   };
 
   return (
