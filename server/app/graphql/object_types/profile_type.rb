@@ -6,7 +6,7 @@ module ObjectTypes
     field :birthday, GraphQL::Types::ISO8601Date, null: false
     field :gender, EnumTypes::Profile::ProfileGenderEnum, null: false
     field :introduction, String, null: false
-    field :avatar_url, String, null: false
+    field :avatar_url, String
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

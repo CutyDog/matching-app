@@ -8,6 +8,7 @@ import { gql } from '@apollo/client';
 import { Profile } from '@/graphql/graphql';
 import { TextField, TextArea } from '@/components/forms';
 import { ActionButton, SubmitButton } from '@/components/buttons';
+import { AvatarImage } from '@/components/images';
 
 const UPDATE_PROFILE = gql`
   mutation updateProfile($introduction: String) {
@@ -26,6 +27,7 @@ export default function AccountPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [introduction, setIntroduction] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
 
   const [updateProfile, { loading: updatingProfile }] = useMutation<{ updateProfile: { profile: Profile } }>(UPDATE_PROFILE);
 
@@ -34,6 +36,7 @@ export default function AccountPage() {
       setName(currentUser.name || '');
       setEmail(currentUser.email || '');
       setIntroduction(currentUser.profile?.introduction || '');
+      setAvatarUrl(currentUser.profile?.avatarUrl || '');
     }
   }, [currentUser]);
 
@@ -43,6 +46,7 @@ export default function AccountPage() {
     setName(currentUser.name || '');
     setEmail(currentUser.email || '');
     setIntroduction(currentUser.profile?.introduction || '');
+    setAvatarUrl(currentUser.profile?.avatarUrl || '');
   };
 
   const handleSave = (e: React.FormEvent) => {
@@ -58,7 +62,11 @@ export default function AccountPage() {
             <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
               <div className="mt-2 flex items-center gap-x-3">
-                <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
+                {avatarUrl ? (
+                  <AvatarImage avatarUrl={avatarUrl} size={128} />
+                ) : (
+                  <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
+                )}
                 <button
                   type="button"
                   className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"

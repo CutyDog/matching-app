@@ -141,6 +141,7 @@ export type MutationUpdateProfileArgs = {
 
 export type Profile = {
   __typename?: 'Profile';
+  avatarUrl: Scalars['String']['output'];
   birthday: Scalars['ISO8601Date']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
   gender: ProfileGenderEnum;

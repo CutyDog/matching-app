@@ -6,6 +6,7 @@ module Mutations
       argument :birthday, GraphQL::Types::ISO8601Date, required: false
       argument :gender, EnumTypes::Profile::ProfileGenderEnum, required: false
       argument :introduction, String, required: false
+      argument :avatar_url, String, required: false
 
       def resolve(**args)
         current_user.profile.update!(args)
