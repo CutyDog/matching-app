@@ -31,13 +31,12 @@ services:
     stdin_open: true
     tty: true
 
-  storage:
+  storage: # ローカルでもGCSを使ってるので今は使わない
     image: fsouza/fake-gcs-server
     ports:
       - 4443:4443
     volumes:
-      # http://localhost:4443/storage/v1/b/assets/
-      - storage_data:/data/assets
+      - storage_data:/data/assets # http://localhost:4443/storage/v1/b/assets/
     environment:
       - GCS_ENDPOINT=0.0.0.0:4443
       - GCS_NO_AUTH=true
