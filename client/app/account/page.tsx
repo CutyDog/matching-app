@@ -90,6 +90,7 @@ export default function AccountPage() {
                       size={128}
                       onClick={handleAvatarClick}
                       label="編集"
+                      isUploading={uploading}
                     />
                   ) : (
                     <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
@@ -144,12 +145,12 @@ export default function AccountPage() {
             <ActionButton
               style={{ backgroundColor: "oklch(44.6% 0.03 256.802)" }}
               onClick={handleCancel}
-              disabled={updatingProfile || uploading}
+              disabled={updatingProfile}
             >
               キャンセル
             </ActionButton>
 
-            <SubmitButton disabled={updatingProfile || uploading}>
+            <SubmitButton isSubmitting={updatingProfile}>
               保存
             </SubmitButton>
           </div>
