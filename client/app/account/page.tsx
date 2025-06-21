@@ -60,19 +60,19 @@ export default function AccountPage() {
           <div className="px-4 py-6 sm:p-8">
             <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-              <div className="mt-2 flex items-center gap-x-3">
-                {avatarUrl ? (
-                  <AvatarImage avatarUrl={avatarUrl} size={128} />
-                ) : (
-                  <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
-                )}
-                <button
-                  type="button"
-                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  変更
-                </button>
-              </div>
+              {avatarUrl ? (
+                <AvatarImage
+                  avatarUrl={avatarUrl}
+                  size={128}
+                  onClick={() => setAvatarUrl('')}
+                  label="編集"
+                />
+              ) : (
+                <UserCircleIcon
+                  className="h-12 w-12 text-gray-300"
+                  aria-hidden="true"
+                />
+              )}
 
               <TextField
                 label="名前"
