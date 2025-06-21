@@ -82,6 +82,7 @@ export default function AccountPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required={false}
+                disabled={true}
               />
 
               <TextField
@@ -91,6 +92,7 @@ export default function AccountPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required={false}
+                disabled={true}
               />
 
               <TextArea
