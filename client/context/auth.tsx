@@ -16,6 +16,12 @@ const CURRENT_ACCOUNT = gql`
       name
       email
       lastLoginAt
+      profile {
+        birthday
+        gender
+        introduction
+        avatarUrl
+      }
     }
   }
 `;

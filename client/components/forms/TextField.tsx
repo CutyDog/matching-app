@@ -5,7 +5,8 @@ export default function TextField({
   autoComplete,
   value,
   onChange,
-  required
+  required,
+  disabled,
 }: {
   label: string;
   name: string;
@@ -14,6 +15,7 @@ export default function TextField({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <div>
@@ -29,7 +31,8 @@ export default function TextField({
           value={value}
           onChange={onChange}
           required={required}
-          className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
+          disabled={disabled}
+          className={`block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm ${disabled ? 'text-gray-400' : ''}`}
         />
       </div>
     </div>

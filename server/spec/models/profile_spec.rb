@@ -3,6 +3,7 @@
 # Table name: profiles
 #
 #  id           :bigint           not null, primary key
+#  avatar_url   :string
 #  birthday     :date             not null
 #  gender       :integer          default("male"), not null
 #  introduction :text

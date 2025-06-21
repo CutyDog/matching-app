@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '@/context/auth';
 import { useMutation } from '@apollo/client';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
@@ -8,13 +8,14 @@ import { gql } from '@apollo/client';
 import { Profile } from '@/graphql/graphql';
 import { TextField, TextArea } from '@/components/forms';
 import { ActionButton, SubmitButton } from '@/components/buttons';
+import { AvatarImage } from '@/components/images';
+import { useImageUpload } from '@/hooks/useImageUpload';
 
 const UPDATE_PROFILE = gql`
-  mutation updateProfile($introduction: String) {
-    updateProfile(input: { introduction: $introduction }) {
+  mutation updateProfile($introduction: String, $avatarUrl: String) {
+    updateProfile(input: { introduction: $introduction, avatarUrl: $avatarUrl }) {
       profile {
         id
-        introduction
       }
     }
   }
@@ -22,10 +23,18 @@ const UPDATE_PROFILE = gql`
 
 export default function AccountPage() {
   const { currentUser } = useContext(AuthContext);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const {
+    handleFileChange,
+    handleUpload,
+    uploading,
+    error: uploadError,
+  } = useImageUpload();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [introduction, setIntroduction] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
 
   const [updateProfile, { loading: updatingProfile }] = useMutation<{ updateProfile: { profile: Profile } }>(UPDATE_PROFILE);
 
@@ -34,8 +43,24 @@ export default function AccountPage() {
       setName(currentUser.name || '');
       setEmail(currentUser.email || '');
       setIntroduction(currentUser.profile?.introduction || '');
+      setAvatarUrl(currentUser.profile?.avatarUrl || '');
     }
   }, [currentUser]);
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = handleFileChange(e);
+
+    if (file) {
+      const newAvatarUrl = await handleUpload(file);
+      if (newAvatarUrl) {
+        setAvatarUrl(newAvatarUrl);
+      }
+    }
+  };
 
   const handleCancel = () => {
     if (!currentUser) return;
@@ -43,11 +68,12 @@ export default function AccountPage() {
     setName(currentUser.name || '');
     setEmail(currentUser.email || '');
     setIntroduction(currentUser.profile?.introduction || '');
+    setAvatarUrl(currentUser.profile?.avatarUrl || '');
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile({ variables: { introduction } });
+    updateProfile({ variables: { introduction, avatarUrl } });
   };
 
   return (
@@ -56,15 +82,32 @@ export default function AccountPage() {
         <form onSubmit={handleSave} className="shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
           <div className="px-4 py-6 sm:p-8">
             <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-              <div className="mt-2 flex items-center gap-x-3">
-                <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
-                <button
-                  type="button"
-                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  変更
-                </button>
+              <div className="col-span-full">
+                <div className="mt-2 flex items-center gap-x-3">
+                  {avatarUrl ? (
+                    <AvatarImage
+                      avatarUrl={avatarUrl}
+                      size={128}
+                      onClick={handleAvatarClick}
+                      label="編集"
+                      isUploading={uploading}
+                    />
+                  ) : (
+                    <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
+                  )}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </div>
+                {uploadError && (
+                  <div className="col-span-6 mt-2 p-3 bg-red-100 text-red-700 rounded">
+                    {uploadError}
+                  </div>
+                )}
               </div>
 
               <TextField
@@ -74,6 +117,7 @@ export default function AccountPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required={false}
+                disabled={true}
               />
 
               <TextField
@@ -83,6 +127,7 @@ export default function AccountPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required={false}
+                disabled={true}
               />
 
               <TextArea
@@ -105,7 +150,7 @@ export default function AccountPage() {
               キャンセル
             </ActionButton>
 
-            <SubmitButton disabled={updatingProfile}>
+            <SubmitButton isSubmitting={updatingProfile}>
               保存
             </SubmitButton>
           </div>

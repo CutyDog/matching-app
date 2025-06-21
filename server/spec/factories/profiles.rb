@@ -3,6 +3,7 @@
 # Table name: profiles
 #
 #  id           :bigint           not null, primary key
+#  avatar_url   :string
 #  birthday     :date             not null
 #  gender       :integer          default("male"), not null
 #  introduction :text
@@ -22,6 +23,7 @@
 FactoryBot.define do
   factory :profile do
     birthday { Faker::Date.birthday(min_age: 18, max_age: 65) }
+    introduction { Faker::Lorem.sentence }
 
     user
   end
