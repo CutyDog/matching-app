@@ -55,7 +55,7 @@ export default function LoginPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <HeartIcon className="mx-auto h-12 w-auto text-primary" />
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">
-          Sign in to your account
+          ログイン
         </h2>
       </div>
 
@@ -64,7 +64,7 @@ export default function LoginPage() {
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-foreground">
-                Email address
+                メールアドレス
               </label>
               <div className="mt-1">
                 <input
@@ -82,7 +82,7 @@ export default function LoginPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-foreground">
-                Password
+                パスワード
               </label>
               <div className="mt-1">
                 <input
@@ -101,8 +101,8 @@ export default function LoginPage() {
             {error && <div className="text-sm text-error">{error}</div>}
 
             <div>
-              <SubmitButton disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
+              <SubmitButton isSubmitting={loading}>
+                ログイン
               </SubmitButton>
             </div>
           </form>
