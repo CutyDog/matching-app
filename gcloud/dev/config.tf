@@ -12,7 +12,11 @@ terraform {
   }
 }
 
+locals {
+  project_id = "matching-app-dev-463517"
+}
+
 provider "google" {
-  project = "matching-app-dev-463517"
+  project = local.project_id
   region  = "asia-northeast1"
 }
