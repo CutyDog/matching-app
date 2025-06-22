@@ -16,6 +16,7 @@ module ObjectTypes
     field :active_likes, [ObjectTypes::LikeType], null: true, require_himself: true
     field :passive_likes, [ObjectTypes::LikeType], null: true, require_himself: true
     field :matches, [ObjectTypes::LikeType], null: true, require_himself: true
+    field :chat_rooms, [ObjectTypes::ChatRoomType], null: true, require_himself: true
 
     def profile
       Loaders::AssociationLoader.for(User, :profile).load(object)
@@ -35,6 +36,10 @@ module ObjectTypes
           (active_matches + passive_matches).sort_by(&:accepted_at).reverse
         end
       end
+    end
+
+    def chat_rooms
+      Loaders::AssociationLoader.for(User, :chat_rooms).load(object)
     end
   end
 end

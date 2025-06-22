@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+module ObjectTypes
+  class ChatRoomType < ::Types::BaseObject
+    field :id, ID, null: false
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
+    field :users, [ObjectTypes::UserType], null: true, require_himself: true
+    field :chat_messages, [ObjectTypes::ChatMessageType], null: true, require_himself: true
+
+    def users
+      Loaders::AssociationLoader.for(ChatRoom, :users).load(object)
+    end
+
+    def chat_messages
+      Loaders::AssociationLoader.for(ChatRoom, :chat_messages, scope: ChatMessage.order(created_at: :asc)).load(object)
+    end
+  end
+end
