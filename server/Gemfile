@@ -66,4 +66,5 @@ end
 
 group :test do
   gem 'test-prof'
+  gem 'action-cable-testing'
 end
