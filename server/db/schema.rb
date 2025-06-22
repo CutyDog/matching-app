@@ -24,6 +24,16 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.index ["user_id"], name: "index_chat_members_on_user_id"
   end
 
+  create_table "chat_messages", force: :cascade do |t|
+    t.bigint "chat_room_id", null: false
+    t.bigint "user_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_room_id"], name: "index_chat_messages_on_chat_room_id"
+    t.index ["user_id"], name: "index_chat_messages_on_user_id"
+  end
+
   create_table "chat_rooms", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -77,6 +87,8 @@ ActiveRecord::Schema[8.0].define(version: 0) do
 
   add_foreign_key "chat_members", "chat_rooms"
   add_foreign_key "chat_members", "users"
+  add_foreign_key "chat_messages", "chat_rooms"
+  add_foreign_key "chat_messages", "users"
   add_foreign_key "likes", "users", column: "receiver_id"
   add_foreign_key "likes", "users", column: "sender_id"
   add_foreign_key "matches", "users", column: "user1_id"

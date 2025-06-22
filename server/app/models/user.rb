@@ -25,6 +25,7 @@ class User < ApplicationRecord
 
   has_many :chat_members, dependent: :destroy
   has_many :chat_rooms, through: :chat_members
+  has_many :chat_messages, dependent: :destroy
 
   has_many :active_likes, -> { accepted.invert_where }, class_name: 'Like', foreign_key: :sender_id, dependent: :destroy, inverse_of: :sender
   has_many :passive_likes, -> { pending }, class_name: 'Like', foreign_key: :receiver_id, dependent: :destroy, inverse_of: :receiver
