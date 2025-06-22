@@ -14,6 +14,21 @@ ActiveRecord::Schema[8.0].define(version: 0) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
+  create_table "chat_members", force: :cascade do |t|
+    t.bigint "chat_room_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_room_id", "user_id"], name: "index_chat_members_on_chat_room_id_and_user_id", unique: true
+    t.index ["chat_room_id"], name: "index_chat_members_on_chat_room_id"
+    t.index ["user_id"], name: "index_chat_members_on_user_id"
+  end
+
+  create_table "chat_rooms", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "likes", force: :cascade do |t|
     t.bigint "sender_id", null: false
     t.bigint "receiver_id", null: false
@@ -60,6 +75,8 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.index ["status"], name: "index_users_on_status"
   end
 
+  add_foreign_key "chat_members", "chat_rooms"
+  add_foreign_key "chat_members", "users"
   add_foreign_key "likes", "users", column: "receiver_id"
   add_foreign_key "likes", "users", column: "sender_id"
   add_foreign_key "matches", "users", column: "user1_id"
