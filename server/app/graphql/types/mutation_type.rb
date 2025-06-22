@@ -13,5 +13,7 @@ module Types
     field :send_like, mutation: Mutations::Likes::SendLike
     field :accept_like, mutation: Mutations::Likes::AcceptLike
     field :reject_like, mutation: Mutations::Likes::RejectLike
+
+    field :send_chat_message, mutation: Mutations::Chats::SendMessage
   end
 end
