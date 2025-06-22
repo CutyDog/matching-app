@@ -39,18 +39,36 @@ RSpec.describe Resolvers::Users::CurrentAccount, type: :request do
               name
             }
           }
+          chatRooms {
+            id
+            users {
+              id
+              name
+            }
+            chatMessages {
+              id
+              content
+              user {
+                id
+                name
+              }
+            }
+          }
         }
       }
     GRAPHQL
   end
 
-  let(:user) { create(:user, :with_profile) }
-  let(:active_like_user) { create(:user) }
-  let!(:active_like) { create(:like, :pending, sender: user, receiver: active_like_user) }
-  let(:passive_like_user) { create(:user) }
-  let!(:passive_like) { create(:like, :pending, sender: passive_like_user, receiver: user) }
-  let(:matched_user) { create(:user) }
-  let!(:matched_like) { create(:like, :accepted, sender: user, receiver: matched_user) }
+  let_it_be(:user) { create(:user, :with_profile) }
+  let_it_be(:active_like_user) { create(:user) }
+  let_it_be(:active_like) { create(:like, :pending, sender: user, receiver: active_like_user) }
+  let_it_be(:passive_like_user) { create(:user) }
+  let_it_be(:passive_like) { create(:like, :pending, sender: passive_like_user, receiver: user) }
+  let_it_be(:matched_user) { create(:user) }
+  let_it_be(:matched_like) { create(:like, :accepted, sender: user, receiver: matched_user) }
+  let_it_be(:chat_room) { create(:chat_room) }
+  let_it_be(:chat_member) { create(:chat_member, user:, chat_room:) }
+  let_it_be(:chat_message) { create(:chat_message, chat_room:, user:) }
 
   context 'when user is signed in' do
     let(:headers) { signed_in_header(user) }
@@ -93,6 +111,27 @@ RSpec.describe Resolvers::Users::CurrentAccount, type: :request do
                 id: matched_user.id.to_s,
                 name: matched_user.name
               }
+            }
+          ],
+          chatRooms: [
+            {
+              id: chat_room.id.to_s,
+              users: [
+                {
+                  id: user.id.to_s,
+                  name: user.name
+                }
+              ],
+              chatMessages: [
+                {
+                  id: chat_message.id.to_s,
+                  content: chat_message.content,
+                  user: {
+                    id: user.id.to_s,
+                    name: user.name
+                  }
+                }
+              ]
             }
           ]
         }

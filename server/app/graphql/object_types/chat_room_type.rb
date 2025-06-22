@@ -6,8 +6,8 @@ module ObjectTypes
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    field :users, [ObjectTypes::UserType], null: true, require_himself: true
-    field :chat_messages, [ObjectTypes::ChatMessageType], null: true, require_himself: true
+    field :users, [ObjectTypes::UserType], null: true
+    field :chat_messages, [ObjectTypes::ChatMessageType], null: true
 
     def users
       Loaders::AssociationLoader.for(ChatRoom, :users).load(object)
