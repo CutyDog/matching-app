@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, use } from 'react';
+import { useState, use } from 'react';
 import { gql, useQuery, useSubscription, useMutation } from '@apollo/client';
 import { ChatRoom, ChatMessage } from '@/graphql/graphql';
 
@@ -62,28 +62,19 @@ const SEND_MESSAGE_MUTATION = gql`
   }
 `;
 
-type Params = Promise<{ id: string }>
-
-export default function TalksChatRoomPage({ params }: { params: Params }) {
+export default function TalksChatRoomPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { data } = useQuery<{ chatRoom: ChatRoom }>(GET_CHAT_ROOM, { variables: { id } });
-  const chatRoom = data?.chatRoom;
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const { data, loading } = useQuery<{ chatRoom: ChatRoom }>(GET_CHAT_ROOM, { variables: { id } });
+  const [newMessages, setNewMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [sendMessage, { loading: sending }] = useMutation(SEND_MESSAGE_MUTATION);
-
-  useEffect(() => {
-    if (chatRoom) {
-      setMessages(chatRoom.chatMessages);
-    }
-  }, [chatRoom]);
 
   useSubscription(NEW_MESSAGE_SUBSCRIPTION, {
     variables: { chatRoomId: id },
     onData: ({ data }) => {
       const newMessage = data?.data?.newMessage?.chatMessage;
       if (newMessage) {
-        setMessages((prev) => {
+        setNewMessages((prev) => {
           // すでに同じIDのメッセージがあれば追加しない
           if (prev.some((msg) => msg.id === newMessage.id)) return prev;
           return [...prev, newMessage];
@@ -103,11 +94,17 @@ export default function TalksChatRoomPage({ params }: { params: Params }) {
     }
   };
 
+  if (loading) return <p>Loading...</p>
+
+  const chatRoom = data?.chatRoom;
+
+  if (!chatRoom) return <p>Chat room not found</p>
+
   return (
     <div>
-      <h1>{chatRoom?.id}</h1>
-      <p>{chatRoom?.users.map((user) => user.name).join(', ')}</p>
-      {messages.map((message) => (
+      <h1>{chatRoom.id}</h1>
+      <p>{chatRoom.users.map((user) => user.name).join(', ')}</p>
+      {chatRoom.chatMessages.concat(newMessages).map((message) => (
         <div key={message.id}>
           <p>{message.content}</p>
           <p>{message.user.name}</p>

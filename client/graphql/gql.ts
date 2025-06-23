@@ -17,12 +17,18 @@ type Documents = {
     "\n  mutation updateProfile($introduction: String, $avatarUrl: String) {\n    updateProfile(input: { introduction: $introduction, avatarUrl: $avatarUrl }) {\n      profile {\n        id\n      }\n    }\n  }\n": typeof types.UpdateProfileDocument,
     "\n  query LikesCurrentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.LikesCurrentAccountDocument,
     "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n": typeof types.SignInDocument,
+    "\n  query TalksChatRoom($id: ID!) {\n    chatRoom(id: $id) {\n      id\n      createdAt\n      updatedAt\n      users {\n        id\n        name\n      }\n      chatMessages {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.TalksChatRoomDocument,
+    "\n  subscription NewMessage($chatRoomId: ID!) {\n    newMessage(chatRoomId: $chatRoomId) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.NewMessageDocument,
+    "\n  mutation SendMessage($chatRoomId: ID!, $content: String!) {\n    sendChatMessage(input: { chatRoomId: $chatRoomId, content: $content }) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.SendMessageDocument,
     "\n  query TalksCurrentAccount {\n    currentAccount {\n      chatRooms {\n        id\n        createdAt\n        updatedAt\n        users {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.TalksCurrentAccountDocument,
 };
 const documents: Documents = {
     "\n  mutation updateProfile($introduction: String, $avatarUrl: String) {\n    updateProfile(input: { introduction: $introduction, avatarUrl: $avatarUrl }) {\n      profile {\n        id\n      }\n    }\n  }\n": types.UpdateProfileDocument,
     "\n  query LikesCurrentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.LikesCurrentAccountDocument,
     "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n": types.SignInDocument,
+    "\n  query TalksChatRoom($id: ID!) {\n    chatRoom(id: $id) {\n      id\n      createdAt\n      updatedAt\n      users {\n        id\n        name\n      }\n      chatMessages {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.TalksChatRoomDocument,
+    "\n  subscription NewMessage($chatRoomId: ID!) {\n    newMessage(chatRoomId: $chatRoomId) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.NewMessageDocument,
+    "\n  mutation SendMessage($chatRoomId: ID!, $content: String!) {\n    sendChatMessage(input: { chatRoomId: $chatRoomId, content: $content }) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.SendMessageDocument,
     "\n  query TalksCurrentAccount {\n    currentAccount {\n      chatRooms {\n        id\n        createdAt\n        updatedAt\n        users {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.TalksCurrentAccountDocument,
 };
 
@@ -52,6 +58,18 @@ export function graphql(source: "\n  query LikesCurrentAccount {\n    currentAcc
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n"): (typeof documents)["\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query TalksChatRoom($id: ID!) {\n    chatRoom(id: $id) {\n      id\n      createdAt\n      updatedAt\n      users {\n        id\n        name\n      }\n      chatMessages {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query TalksChatRoom($id: ID!) {\n    chatRoom(id: $id) {\n      id\n      createdAt\n      updatedAt\n      users {\n        id\n        name\n      }\n      chatMessages {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  subscription NewMessage($chatRoomId: ID!) {\n    newMessage(chatRoomId: $chatRoomId) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  subscription NewMessage($chatRoomId: ID!) {\n    newMessage(chatRoomId: $chatRoomId) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation SendMessage($chatRoomId: ID!, $content: String!) {\n    sendChatMessage(input: { chatRoomId: $chatRoomId, content: $content }) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation SendMessage($chatRoomId: ID!, $content: String!) {\n    sendChatMessage(input: { chatRoomId: $chatRoomId, content: $content }) {\n      chatMessage {\n        id\n        content\n        createdAt\n        updatedAt\n        user {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
