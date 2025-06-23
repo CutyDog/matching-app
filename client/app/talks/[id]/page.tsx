@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useState, useEffect, use } from 'react';
+import { gql, useQuery, useSubscription } from '@apollo/client';
 import { ChatRoom, ChatMessage } from '@/graphql/graphql';
 
 const GET_CHAT_ROOM = gql`
@@ -28,8 +28,28 @@ const GET_CHAT_ROOM = gql`
   }
 `
 
-export default function TalksChatRoomPage({ params }: { params: { id: string } }) {
-  const { data } = useQuery<{ chatRoom: ChatRoom }>(GET_CHAT_ROOM, { variables: { id: params.id } });
+const NEW_MESSAGE_SUBSCRIPTION = gql`
+  subscription NewMessage($chatRoomId: ID!) {
+    newMessage(chatRoomId: $chatRoomId) {
+      chatMessage {
+        id
+        content
+        createdAt
+        updatedAt
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+type Params = Promise<{ id: string }>
+
+export default function TalksChatRoomPage({ params }: { params: Params }) {
+  const { id } = use(params);
+  const { data } = useQuery<{ chatRoom: ChatRoom }>(GET_CHAT_ROOM, { variables: { id } });
   const chatRoom = data?.chatRoom;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
@@ -38,6 +58,20 @@ export default function TalksChatRoomPage({ params }: { params: { id: string } }
       setMessages(chatRoom.chatMessages);
     }
   }, [chatRoom]);
+
+  useSubscription(NEW_MESSAGE_SUBSCRIPTION, {
+    variables: { chatRoomId: id },
+    onData: ({ data }) => {
+      const newMessage = data?.data?.newMessage?.chatMessage;
+      if (newMessage) {
+        setMessages((prev) => {
+          // すでに同じIDのメッセージがあれば追加しない
+          if (prev.some((msg) => msg.id === newMessage.id)) return prev;
+          return [...prev, newMessage];
+        });
+      }
+    },
+  });
 
   return (
     <div>
