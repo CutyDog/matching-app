@@ -13,9 +13,8 @@
     "@apollo/client": "^3.13.8",
     "@google-cloud/storage": "^7.16.0",
     "@heroicons/react": "^2.2.0",
-    "@rails/actioncable": "^8.0.200",
     "graphql": "^16.11.0",
-    "graphql-ruby-client": "^1.14.8",
+    "graphql-ws": "^6.0.5",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
