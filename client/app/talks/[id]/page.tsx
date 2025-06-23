@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, use } from 'react';
-import { gql, useQuery, useSubscription } from '@apollo/client';
+import { gql, useQuery, useSubscription, useMutation } from '@apollo/client';
 import { ChatRoom, ChatMessage } from '@/graphql/graphql';
 
 const GET_CHAT_ROOM = gql`
@@ -45,6 +45,23 @@ const NEW_MESSAGE_SUBSCRIPTION = gql`
   }
 `;
 
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SendMessage($chatRoomId: ID!, $content: String!) {
+    sendChatMessage(input: { chatRoomId: $chatRoomId, content: $content }) {
+      chatMessage {
+        id
+        content
+        createdAt
+        updatedAt
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 type Params = Promise<{ id: string }>
 
 export default function TalksChatRoomPage({ params }: { params: Params }) {
@@ -52,6 +69,8 @@ export default function TalksChatRoomPage({ params }: { params: Params }) {
   const { data } = useQuery<{ chatRoom: ChatRoom }>(GET_CHAT_ROOM, { variables: { id } });
   const chatRoom = data?.chatRoom;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState('');
+  const [sendMessage, { loading: sending }] = useMutation(SEND_MESSAGE_MUTATION);
 
   useEffect(() => {
     if (chatRoom) {
@@ -73,6 +92,17 @@ export default function TalksChatRoomPage({ params }: { params: Params }) {
     },
   });
 
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    try {
+      await sendMessage({ variables: { chatRoomId: id, content: input } });
+      setInput('');
+    } catch (err) {
+      alert('送信に失敗しました: ' + (err instanceof Error ? err.message : String(err)));
+    }
+  };
+
   return (
     <div>
       <h1>{chatRoom?.id}</h1>
@@ -83,6 +113,19 @@ export default function TalksChatRoomPage({ params }: { params: Params }) {
           <p>{message.user.name}</p>
         </div>
       ))}
+      <form onSubmit={handleSend} style={{ marginTop: 16 }}>
+        <input
+          type="text"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          placeholder="メッセージを入力"
+          disabled={sending}
+          style={{ width: '80%' }}
+        />
+        <button type="submit" disabled={sending || !input.trim()} style={{ marginLeft: 8 }}>
+          送信
+        </button>
+      </form>
     </div>
   );
 }
