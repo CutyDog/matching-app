@@ -15,13 +15,15 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 type Documents = {
     "\n  mutation updateProfile($introduction: String, $avatarUrl: String) {\n    updateProfile(input: { introduction: $introduction, avatarUrl: $avatarUrl }) {\n      profile {\n        id\n      }\n    }\n  }\n": typeof types.UpdateProfileDocument,
-    "\n  query currentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.CurrentAccountDocument,
+    "\n  query LikesCurrentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.LikesCurrentAccountDocument,
     "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n": typeof types.SignInDocument,
+    "\n  query TalksCurrentAccount {\n    currentAccount {\n      chatRooms {\n        id\n        createdAt\n        updatedAt\n        users {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.TalksCurrentAccountDocument,
 };
 const documents: Documents = {
     "\n  mutation updateProfile($introduction: String, $avatarUrl: String) {\n    updateProfile(input: { introduction: $introduction, avatarUrl: $avatarUrl }) {\n      profile {\n        id\n      }\n    }\n  }\n": types.UpdateProfileDocument,
-    "\n  query currentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.CurrentAccountDocument,
+    "\n  query LikesCurrentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.LikesCurrentAccountDocument,
     "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n": types.SignInDocument,
+    "\n  query TalksCurrentAccount {\n    currentAccount {\n      chatRooms {\n        id\n        createdAt\n        updatedAt\n        users {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.TalksCurrentAccountDocument,
 };
 
 /**
@@ -45,11 +47,15 @@ export function graphql(source: "\n  mutation updateProfile($introduction: Strin
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query currentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query currentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query LikesCurrentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query LikesCurrentAccount {\n    currentAccount {\n      activeLikes {\n        id\n        createdAt\n        receiver {\n          id\n          name\n        }\n      }\n      passiveLikes {\n        id\n        createdAt\n        sender {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n"): (typeof documents)["\n  mutation signIn($email: String!, $password: String!) {\n    signIn(input: { email: $email, password: $password }) {\n      token\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query TalksCurrentAccount {\n    currentAccount {\n      chatRooms {\n        id\n        createdAt\n        updatedAt\n        users {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query TalksCurrentAccount {\n    currentAccount {\n      chatRooms {\n        id\n        createdAt\n        updatedAt\n        users {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
