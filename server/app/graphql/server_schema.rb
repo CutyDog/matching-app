@@ -6,6 +6,7 @@ class ServerSchema < GraphQL::Schema
   subscription(Types::SubscriptionType)
 
   use GraphQL::Batch
+  use GraphQL::Subscriptions::ActionCableSubscriptions
 
   rescue_from ActiveRecord::RecordInvalid do |e|
     raise GraphQL::ExecutionError, e.record.errors.full_messages.join(', ')

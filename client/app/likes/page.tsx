@@ -5,7 +5,7 @@ import { gql, useQuery } from '@apollo/client';
 import { Like } from '@/graphql/graphql';
 
 const GET_LIKES = gql`
-  query currentAccount {
+  query LikesCurrentAccount {
     currentAccount {
       activeLikes {
         id

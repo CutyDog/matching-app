@@ -23,6 +23,10 @@ class User < ApplicationRecord
 
   has_one :profile, dependent: :destroy
 
+  has_many :chat_members, dependent: :destroy
+  has_many :chat_rooms, through: :chat_members
+  has_many :chat_messages, dependent: :destroy
+
   has_many :active_likes, -> { accepted.invert_where }, class_name: 'Like', foreign_key: :sender_id, dependent: :destroy, inverse_of: :sender
   has_many :passive_likes, -> { pending }, class_name: 'Like', foreign_key: :receiver_id, dependent: :destroy, inverse_of: :receiver
   has_many :active_liked_users, through: :active_likes, source: :receiver
@@ -70,5 +74,9 @@ class User < ApplicationRecord
     raise UnauthorizedError, 'Invalid email or password' unless authenticate(password)
 
     update!(last_login_at: Time.current)
+  end
+
+  def participant?(chat_room)
+    chat_room.users.include? self
   end
 end

@@ -3,8 +3,8 @@ class GraphqlObjectGenerator
     def execute(model)
       command = ['bin/rails', 'g', 'graphql:object', model].join(' ')
       system command
-      move_file(model.downcase)
-      overwrite_file(model.downcase)
+      move_file(model.underscore)
+      overwrite_file(model.underscore)
     end
 
     private
@@ -33,8 +33,8 @@ class GraphqlInputGenerator
     def execute(model)
       command = ['bin/rails', 'g', 'graphql:input', model].join(' ')
       system command
-      move_file(model.downcase)
-      overwrite_file(model.downcase)
+      move_file(model.underscore)
+      overwrite_file(model.underscore)
     end
 
     private

@@ -2,10 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import HomeIcon from '@/components/icons/HomeIcon';
-import HeartIcon from '@/components/icons/HeartIcon';
-import ChatIcon from '@/components/icons/ChatIcon';
-import UserIcon from '@/components/icons/UserIcon';
+import { HomeIcon, HeartIcon, ChatIcon, UserIcon } from '@/components/icons';
 
 export default function Navigation() {
   const pathname = usePathname();
