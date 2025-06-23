@@ -15,7 +15,7 @@ module ApplicationCable
     end
 
     def jwt_token
-      request.headers['Token']&.split(' ')&.last
+      request.params[:Token]&.split(' ')&.last
     end
   end
 end

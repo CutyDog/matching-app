@@ -2,7 +2,6 @@
 
 module Types
   class SubscriptionType < Types::BaseObject
-    field :sample, subscription: Subscriptions::Sample
-    field :chat_message_was_posted, subscription: Subscriptions::ChatMessageWasPosted
+    field :new_message, subscription: Subscriptions::Chats::NewMessage
   end
 end
