@@ -37,7 +37,7 @@ RSpec.describe Resolvers::Users::User, type: :request do
           profile: {
             id: user.profile.id.to_s,
             birthday: user.profile.birthday.iso8601,
-            gender: user.profile.gender.upcase,
+            gender: user.profile.gender.upcase
           }
         }
       }
@@ -62,7 +62,7 @@ RSpec.describe Resolvers::Users::User, type: :request do
           profile: {
             id: user2.profile.id.to_s,
             birthday: user2.profile.birthday.iso8601,
-            gender: user2.profile.gender.upcase,
+            gender: user2.profile.gender.upcase
           }
         }
       }

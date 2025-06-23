@@ -5,7 +5,7 @@ module Subscriptions
 
       argument :chat_room_id, ID, required: true
 
-      def update(**args)
+      def update(**_args)
         { chat_message: object }
       end
     end

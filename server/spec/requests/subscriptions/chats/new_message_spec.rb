@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GraphqlChannel, type: :channel do
+RSpec.describe GraphqlChannel, type: :channel do # rubocop:disable RSpec/SpecFilePathFormat
   subject { perform_subscription(query, variables:) }
 
   let(:query) do

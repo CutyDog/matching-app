@@ -51,7 +51,7 @@ RSpec.describe Resolvers::Chats::ChatRoom, type: :request do
     it 'returns nil' do
       subject
       expect(response_errors).to be_present
-      expect(response_errors.first['message']).to eq("You are not a participant of this chat room.")
+      expect(response_errors.first['message']).to eq 'You are not a participant of this chat room.'
     end
   end
 end

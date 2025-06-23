@@ -5,14 +5,14 @@ module Resolvers
 
       argument :id, ID, required: true
 
-      def resolve(**args)
+      def resolve(**_args)
         chat_room
       end
 
-      def authorized?(**args)
+      def authorized?(**_args)
         super
 
-        return true if current_user.is_participant?(chat_room)
+        return true if current_user.participant?(chat_room)
 
         raise GraphQL::ExecutionError, 'You are not a participant of this chat room.'
       end

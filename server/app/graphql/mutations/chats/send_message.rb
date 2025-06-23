@@ -6,8 +6,8 @@ module Mutations
       argument :chat_room_id, ID, required: true
       argument :content, String, required: true
 
-      def resolve(chat_room_id:, content:)
-        chat_message = chat_room.chat_messages.create!(user: current_user, content:)
+      def resolve(**_args)
+        chat_message = chat_room.chat_messages.create!(user: current_user, content: arguments[:content])
 
         ServerSchema.subscriptions.trigger(:new_message, { chat_room_id: chat_room.id }, chat_message)
 

@@ -76,7 +76,7 @@ class User < ApplicationRecord
     update!(last_login_at: Time.current)
   end
 
-  def is_participant?(chat_room)
+  def participant?(chat_room)
     chat_room.users.include? self
   end
 end

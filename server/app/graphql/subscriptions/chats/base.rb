@@ -4,7 +4,7 @@ module Subscriptions
       def authorized?(**args)
         super
 
-        return true if current_user.is_participant?(chat_room)
+        return true if current_user.participant?(chat_room)
 
         raise GraphQL::ExecutionError, 'You are not a participant of this chat room.'
       end
