@@ -24,6 +24,7 @@ type Documents = {
     "\n  mutation SendLike($receiverId: ID!) {\n    sendLike(input: { receiverId: $receiverId }) {\n      like {\n        id\n      }\n    }\n  }\n": typeof types.SendLikeDocument,
     "\n  mutation AcceptLike($senderId: ID!) {\n    acceptLike(input: { senderId: $senderId }) {\n      like {\n        id\n      }\n    }\n  }\n": typeof types.AcceptLikeDocument,
     "\n  query Candidates($first: Int, $after: String, $passiveLikes: Boolean) {\n    candidates(first: $first, after: $after, passiveLikes: $passiveLikes) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          profile {\n            avatarUrl\n            age\n            introduction\n          }\n          likesMe\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.CandidatesDocument,
+    "\n  mutation StartChat($memberId: ID!) {\n    startChat(input: { memberId: $memberId }) {\n      chatRoom {\n        id\n      }\n    }\n  }\n": typeof types.StartChatDocument,
 };
 const documents: Documents = {
     "\n  mutation updateProfile($introduction: String, $avatarUrl: String) {\n    updateProfile(input: { introduction: $introduction, avatarUrl: $avatarUrl }) {\n      profile {\n        id\n      }\n    }\n  }\n": types.UpdateProfileDocument,
@@ -36,6 +37,7 @@ const documents: Documents = {
     "\n  mutation SendLike($receiverId: ID!) {\n    sendLike(input: { receiverId: $receiverId }) {\n      like {\n        id\n      }\n    }\n  }\n": types.SendLikeDocument,
     "\n  mutation AcceptLike($senderId: ID!) {\n    acceptLike(input: { senderId: $senderId }) {\n      like {\n        id\n      }\n    }\n  }\n": types.AcceptLikeDocument,
     "\n  query Candidates($first: Int, $after: String, $passiveLikes: Boolean) {\n    candidates(first: $first, after: $after, passiveLikes: $passiveLikes) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          profile {\n            avatarUrl\n            age\n            introduction\n          }\n          likesMe\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.CandidatesDocument,
+    "\n  mutation StartChat($memberId: ID!) {\n    startChat(input: { memberId: $memberId }) {\n      chatRoom {\n        id\n      }\n    }\n  }\n": types.StartChatDocument,
 };
 
 /**
@@ -92,6 +94,10 @@ export function graphql(source: "\n  mutation AcceptLike($senderId: ID!) {\n    
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Candidates($first: Int, $after: String, $passiveLikes: Boolean) {\n    candidates(first: $first, after: $after, passiveLikes: $passiveLikes) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          profile {\n            avatarUrl\n            age\n            introduction\n          }\n          likesMe\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n"): (typeof documents)["\n  query Candidates($first: Int, $after: String, $passiveLikes: Boolean) {\n    candidates(first: $first, after: $after, passiveLikes: $passiveLikes) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          profile {\n            avatarUrl\n            age\n            introduction\n          }\n          likesMe\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation StartChat($memberId: ID!) {\n    startChat(input: { memberId: $memberId }) {\n      chatRoom {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation StartChat($memberId: ID!) {\n    startChat(input: { memberId: $memberId }) {\n      chatRoom {\n        id\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

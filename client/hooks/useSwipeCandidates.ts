@@ -1,7 +1,8 @@
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { Swiper as SwiperType } from 'swiper/types';
 import { useQuery, useMutation, gql } from '@apollo/client';
-import { UserEdge, PageInfo, Like } from '@/graphql/graphql';
+import { UserEdge, User, PageInfo, Like, ChatRoom } from '@/graphql/graphql';
 
 const SEND_LIKE_MUTATION = gql`
   mutation SendLike($receiverId: ID!) {
@@ -49,6 +50,16 @@ const CANDIDATES_QUERY = gql`
   }
 `;
 
+const START_CHAT_MUTATION = gql`
+  mutation StartChat($memberId: ID!) {
+    startChat(input: { memberId: $memberId }) {
+      chatRoom {
+        id
+      }
+    }
+  }
+`;
+
 export const useSwipeCandidates = ({
   passiveLikes = false,
   pageSize = PAGE_SIZE,
@@ -56,14 +67,17 @@ export const useSwipeCandidates = ({
   passiveLikes?: boolean;
   pageSize?: number;
 }) => {
+  const router = useRouter();
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [candidates, setCandidates] = useState<UserEdge[]>([]);
   const [endCursor, setEndCursor] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState(false);
   const [showMatchedPopup, setShowMatchedPopup] = useState(false);
+  const [matchedUser, setMatchedUser] = useState<User | null>(null);
   const [sendLike] = useMutation<{ sendLike: { like: Like } }>(SEND_LIKE_MUTATION);
   const [acceptLike] = useMutation<{ acceptLike: { like: Like } }>(ACCEPT_LIKE_MUTATION);
+  const [startChat] = useMutation<{ startChat: { chatRoom: ChatRoom } }>(START_CHAT_MUTATION);
   const { data, fetchMore } = useQuery<{ candidates: { edges: UserEdge[]; pageInfo: PageInfo } }>(CANDIDATES_QUERY, {
     variables: { first: pageSize, after: null, passiveLikes },
   });
@@ -85,6 +99,7 @@ export const useSwipeCandidates = ({
       if (candidate.likesMe) {
         await acceptLike({ variables: { senderId: candidate.id } });
         setShowMatchedPopup(true);
+        setMatchedUser(candidate);
       } else {
         await sendLike({ variables: { receiverId: candidate.id } });
       }
@@ -94,6 +109,13 @@ export const useSwipeCandidates = ({
       console.error('Failed to send like:', error);
     }
   }, [swiper, candidates, sendLike, acceptLike]);
+
+  const handleStartChat = useCallback(async () => {
+    if (!matchedUser) return;
+    const result = await startChat({ variables: { memberId: matchedUser.id } });
+    setShowMatchedPopup(false);
+    router.push(`/talks/${result.data?.startChat.chatRoom.id}`);
+  }, [matchedUser, startChat, router]);
 
   const fetchMoreCandidates = useCallback(async () => {
     if (!endCursor || isFetching || !hasNextPage) return;
@@ -130,5 +152,8 @@ export const useSwipeCandidates = ({
     isFetching,
     showMatchedPopup,
     setShowMatchedPopup,
+    matchedUser,
+    setMatchedUser,
+    handleStartChat,
   };
 }
