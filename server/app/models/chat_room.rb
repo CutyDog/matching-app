@@ -11,5 +11,5 @@ class ChatRoom < ApplicationRecord
   has_many :users, through: :chat_members
   has_many :chat_messages, dependent: :destroy
 
-  has_one :latest_message, -> { order(created_at: :desc) }, class_name: 'ChatMessage'
+  has_one :latest_message, -> { order(created_at: :desc) }, class_name: 'ChatMessage', dependent: :destroy, inverse_of: :chat_room
 end
