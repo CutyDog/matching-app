@@ -1,38 +1,71 @@
 'use client';
 
-import { useContext } from 'react';
-import { useRouter } from 'next/navigation';
-import { AuthContext } from '@/context/auth';
+import { useState } from 'react';
+import { gql, useQuery } from '@apollo/client';
+import { User } from '@/graphql/graphql';
+import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
-function formatDate(dateStr?: string | null) {
-  if (!dateStr) return "-";
-  const date = new Date(dateStr);
-  return date.toLocaleString();
-}
+const CANDIDATES_QUERY = gql`
+  query Candidates($first: Int, $after: String) {
+    candidates(first: $first, after: $after) {
+      nodes {
+        id
+        name
+        profile {
+          avatarUrl
+          age
+          introduction
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`;
 
 export default function Home() {
-  const router = useRouter();
-  const { currentUser } = useContext(AuthContext);
+  const [after, setAfter] = useState<string | null>(null);
+  const { data } = useQuery<{ candidates: { nodes: User[] } }>(CANDIDATES_QUERY, {
+    variables: {
+      first: 10,
+      after,
+    },
+  });
 
-  if (currentUser) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light py-10 px-2">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-background/90 shadow-xl rounded-xl px-8 py-10 mb-10 border border-muted text-center">
-            <h1 className="text-3xl font-bold text-primary mb-2">{currentUser.name}</h1>
-            <p className="text-foreground mb-2">最終ログイン: {formatDate(currentUser.lastLoginAt)}</p>
-          </div>
+  if (!data) return <div>Loading...</div>;
 
-          <div className="flex justify-center">
-            <button
-              className="px-6 py-2 bg-primary text-background rounded hover:bg-primary-dark"
-              onClick={() => router.push('/account')}
-            >
-              アカウントページへ
-            </button>
-          </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light py-10 px-2 flex flex-col items-center">
+      <div className="w-full flex flex-col items-center">
+        <div className="relative w-[340px] h-[480px]">
+          <Swiper
+            effect="stack"
+            grabCursor={true}
+            className="w-full h-full"
+          >
+            {data.candidates.nodes.map((user) => (
+              <SwiperSlide key={user.id}>
+                <div className="w-[320px] h-[460px] bg-white rounded-xl shadow-lg flex flex-col items-center justify-center p-4 border border-gray-200">
+                  <Image
+                    src={user.profile?.avatarUrl || '/default-avatar.png'}
+                    alt={user.name}
+                    className="rounded-full object-cover"
+                    width={128}
+                    height={128}
+                  />
+                  <h2 className="text-xl text-gray-500 font-bold mb-2">{user.name}</h2>
+                  <p className="text-sm text-gray-500">{user.profile?.age}歳</p>
+                  {/* 他のプロフィール情報もここに追加可能 */}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
