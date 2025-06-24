@@ -3,6 +3,8 @@
 import { useState, use } from 'react';
 import { gql, useQuery, useSubscription, useMutation } from '@apollo/client';
 import { ChatRoom, ChatMessage } from '@/graphql/graphql';
+import { MessageField } from '@/components/forms';
+import { MessageItem } from '@/components/chats';
 
 const GET_CHAT_ROOM = gql`
   query TalksChatRoom($id: ID!) {
@@ -22,6 +24,9 @@ const GET_CHAT_ROOM = gql`
         user {
           id
           name
+          profile {
+            avatarUrl
+          }
         }
       }
     }
@@ -39,6 +44,9 @@ const NEW_MESSAGE_SUBSCRIPTION = gql`
         user {
           id
           name
+          profile {
+            avatarUrl
+          }
         }
       }
     }
@@ -100,28 +108,29 @@ export default function TalksChatRoomPage({ params }: { params: Promise<{ id: st
 
   if (!chatRoom) return <p>Chat room not found</p>
 
+  // メッセージを時系列順でまとめる
+  const allMessages = [...chatRoom.chatMessages, ...newMessages].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
   return (
-    <div>
-      <h1>{chatRoom.id}</h1>
-      <p>{chatRoom.users.map((user) => user.name).join(', ')}</p>
-      {chatRoom.chatMessages.concat(newMessages).map((message) => (
-        <div key={message.id}>
-          <p>{message.content}</p>
-          <p>{message.user.name}</p>
-        </div>
-      ))}
-      <form onSubmit={handleSend} style={{ marginTop: 16 }}>
-        <input
-          type="text"
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          placeholder="メッセージを入力"
+    <div className="flex flex-col h-screen">
+      <div className="flex-shrink-0 p-4">
+        <h1 className="text-lg font-bold">トーク</h1>
+        <p className="text-sm text-gray-500">{chatRoom.users.map((user) => user.name).join(', ')}</p>
+      </div>
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {allMessages.map((message) => (
+          <MessageItem
+            key={message.id}
+            message={message}
+          />
+        ))}
+      </div>
+      <form onSubmit={handleSend} className="flex items-center p-4">
+        <MessageField
+          input={input}
+          setInput={setInput}
           disabled={sending}
-          style={{ width: '80%' }}
         />
-        <button type="submit" disabled={sending || !input.trim()} style={{ marginLeft: 8 }}>
-          送信
-        </button>
       </form>
     </div>
   );
