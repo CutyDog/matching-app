@@ -44,27 +44,32 @@ const SEND_LIKE_MUTATION = gql`
 
 export default function Home() {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
-  const [after, setAfter] = useState<string | null>(null);
+  const [candidates, setCandidates] = useState<UserEdge[]>([]);
+  // const [after, setAfter] = useState<string | null>(null);
   const { data } = useQuery<{ candidates: { edges: UserEdge[], pageInfo: PageInfo } }>(CANDIDATES_QUERY, {
     variables: {
       first: 10,
-      after,
+      after: null,
     },
   });
   const [sendLike] = useMutation<{ sendLike: { like: Like } }>(SEND_LIKE_MUTATION);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setAfter(data.candidates.pageInfo.endCursor || null);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data) {
+      // 初回データ取得時にcandidatesをセット
+      setCandidates(data.candidates.edges);
+    }
+  }, [data, setCandidates]);
 
   if (!data) return <div>Loading...</div>;
 
   const handleSendLike = () => {
-    const candidate = data?.candidates.edges[swiper?.activeIndex || 0].node
+    if (!swiper) return;
+    const idx = swiper.activeIndex;
+    const candidate = candidates[idx]?.node;
     if (!candidate) return;
     sendLike({ variables: { receiverId: candidate.id } });
+    setCandidates((prev) => prev.filter((_, i) => i !== idx));
   };
 
   return (
@@ -77,23 +82,21 @@ export default function Home() {
             onSwiper={setSwiper}
             className="w-full"
           >
-            {data.candidates.edges.map((edge) => (
-              <>
-                <SwiperSlide key={edge.node?.id}>
-                  <div className="w-[320px] h-[460px] bg-white rounded-xl shadow-lg flex flex-col items-center justify-center p-4 border border-gray-200">
-                    <Image
-                      src={edge.node?.profile?.avatarUrl || '/default-avatar.png'}
-                      alt={edge.node?.name || ''}
-                      className="rounded-full object-cover"
-                      width={128}
-                      height={128}
-                    />
-                    <h2 className="text-xl text-gray-500 font-bold mb-2">{edge.node?.name}</h2>
-                    <p className="text-sm text-gray-500">{edge.node?.profile?.age}歳</p>
-                    {/* 他のプロフィール情報もここに追加可能 */}
-                  </div>
-                </SwiperSlide>
-              </>
+            {candidates.map((edge) => (
+              <SwiperSlide key={edge.node?.id}>
+                <div className="w-[320px] h-[460px] bg-white rounded-xl shadow-lg flex flex-col items-center justify-center p-4 border border-gray-200">
+                  <Image
+                    src={edge.node?.profile?.avatarUrl || '/default-avatar.png'}
+                    alt={edge.node?.name || ''}
+                    className="rounded-full object-cover"
+                    width={128}
+                    height={128}
+                  />
+                  <h2 className="text-xl text-gray-500 font-bold mb-2">{edge.node?.name}</h2>
+                  <p className="text-sm text-gray-500">{edge.node?.profile?.age}歳</p>
+                  {/* 他のプロフィール情報もここに追加可能 */}
+                </div>
+              </SwiperSlide>
             ))}
             <div className="flex justify-between w-full">
               <BackAction />
