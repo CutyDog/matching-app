@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { Like } from '@/graphql/graphql';
+import { LikeCard } from '@/components/users';
 
 const GET_LIKES = gql`
   query LikesCurrentAccount {
@@ -13,6 +14,9 @@ const GET_LIKES = gql`
         receiver {
           id
           name
+          profile {
+            avatarUrl
+          }
         }
       }
       passiveLikes {
@@ -21,6 +25,9 @@ const GET_LIKES = gql`
         sender {
           id
           name
+          profile {
+            avatarUrl
+          }
         }
       }
     }
@@ -40,15 +47,16 @@ export default function LikesPage() {
   ]
 
   return (
-    <div>
-      <div className="flex w-full border-muted shadow justify-around items-center h-16">
-        <div className="text-sm font-medium text-center border-b border-gray-200">
+    <div className="max-w-2xl mx-auto py-4 px-2 min-h-screen">
+      <h1 className="text-xl font-bold mb-4">いいね一覧</h1>
+      <div className="flex w-full border-muted shadow justify-around items-center h-16 mb-4">
+        <div className="text-sm font-medium text-center border-b border-gray-200 w-full">
           <ul className="flex flex-wrap -mb-px">
             {tabs.map((tab) => (
               <li
                 key={tab.key}
-                className={`me-2 inline-block p-4 border-b-2 border-transparent ${
-                  tab.key === activeTab ? 'text-foreground' : 'text-foreground/70 hover:text-foreground'
+                className={`me-2 inline-block p-4 border-b-2 border-transparent cursor-pointer ${
+                  tab.key === activeTab ? 'text-foreground border-primary' : 'text-foreground/70 hover:text-foreground'
                 }`}
                 onClick={() => setActiveTab(tab.key)}
               >
@@ -59,26 +67,30 @@ export default function LikesPage() {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-4">
         {activeTab === 'active' && (
-          <ul className='space-y-4'>
+          <div className="grid grid-cols-2 gap-4">
             {activeLikes.length > 0 ? activeLikes.map(like => (
-              <li key={like.id} className='p-4 border rounded-lg shadow-sm'>
-                <p className='font-semibold'>{like.receiver.name}さんに「いいね！」しました</p>
-                <p className='text-sm text-gray-500'>{new Date(like.createdAt).toLocaleString()}</p>
-              </li>
-            )) : <p>まだ誰にも「いいね！」していません。</p>}
-          </ul>
+              <LikeCard
+                key={like.id}
+                user={like.receiver}
+                date={new Date(like.createdAt).toLocaleDateString()}
+                message="「いいね！」しました"
+              />
+            )) : <p className="col-span-2 text-center text-gray-400">まだ誰にも「いいね！」していません。</p>}
+          </div>
         )}
         {activeTab === 'passive' && (
-          <ul className='space-y-4'>
+          <div className="grid grid-cols-2 gap-4">
             {passiveLikes.length > 0 ? passiveLikes.map(like => (
-              <li key={like.id} className='p-4 border rounded-lg shadow-sm'>
-                <p className='font-semibold'>{like.sender.name}さんから「いいね！」が届きました</p>
-                <p className='text-sm text-gray-500'>{new Date(like.createdAt).toLocaleString()}</p>
-              </li>
-            )) : <p>まだ誰からも「いいね！」されていません。</p>}
-          </ul>
+              <LikeCard
+                key={like.id}
+                user={like.sender}
+                date={new Date(like.createdAt).toLocaleDateString()}
+                message="「いいね！」が届きました"
+              />
+            )) : <p className="col-span-2 text-center text-gray-400">まだ誰からも「いいね！」されていません。</p>}
+          </div>
         )}
       </div>
     </div>

@@ -16,6 +16,14 @@ export default function Home() {
     isFetching,
   } = useSwipeCandidates({ pageSize: 10 });
 
+  if (candidates.length === 0) {
+    return <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light flex flex-col items-center justify-center py-10 px-2">
+      <div className="w-full flex flex-col items-center justify-center">
+        <p className="text-center text-2xl font-bold">No candidates found</p>
+      </div>
+    </div>
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light flex flex-col items-center justify-center py-10 px-2">
       <div className="w-full flex flex-col items-center justify-center">
