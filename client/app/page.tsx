@@ -19,27 +19,25 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light py-10 px-2 flex flex-col items-center">
       <div className="w-full flex flex-col items-center">
-        <div className="relative w-[340px] h-[480px]">
-          <Swiper
-            effect="stack"
-            grabCursor={true}
-            onSwiper={setSwiper}
-            onSlideChange={handleSlideChange}
-            className="w-full"
-          >
-            {candidates.map((edge) => (
-              <SwiperSlide key={edge.node?.id}>
-                <CandidateCard edge={edge} />
-              </SwiperSlide>
-            ))}
-            <div className="flex justify-between w-full">
-              <BackAction />
-              <NopeAction />
-              <LikeAction onClick={handleSendLike} />
-            </div>
-          </Swiper>
-          {isFetching && <div className="text-center mt-2">Loading more...</div>}
-        </div>
+        <Swiper
+          effect="stack"
+          grabCursor={true}
+          onSwiper={setSwiper}
+          onSlideChange={handleSlideChange}
+          className="w-full"
+        >
+          {candidates.map((edge) => (
+            <SwiperSlide key={edge.node?.id}>
+              <CandidateCard edge={edge} />
+            </SwiperSlide>
+          ))}
+          <div className="flex justify-between w-full">
+            <BackAction />
+            <NopeAction />
+            <LikeAction onClick={handleSendLike} />
+          </div>
+        </Swiper>
+        {isFetching && <div className="text-center mt-2">Loading more...</div>}
       </div>
     </div>
   );
