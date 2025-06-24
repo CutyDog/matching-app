@@ -3,8 +3,10 @@ import { ThumbsUpIcon } from "../icons";
 
 export default function LikeAction({
   onClick,
+  iconSize = 'w-6 h-6',
 }: {
   onClick?: () => void;
+  iconSize?: string;
 }) {
   const swiper = useSwiper();
   const handleClick = () => {
@@ -17,7 +19,7 @@ export default function LikeAction({
       className="bg-primary text-white"
       onClick={handleClick}
     >
-      <ThumbsUpIcon className="w-6 h-6" />
+      <ThumbsUpIcon className={iconSize} />
     </button>
   );
 }

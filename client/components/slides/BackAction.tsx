@@ -1,10 +1,12 @@
 import { useSwiper } from "swiper/react";
 import { BackForwardIcon } from "../icons";
 
-export default function NopeAction({
+export default function BackAction({
   onClick,
+  iconSize = 'w-6 h-6',
 }: {
   onClick?: () => void;
+  iconSize?: string;
 }) {
   const swiper = useSwiper();
   const handleClick = () => {
@@ -17,7 +19,7 @@ export default function NopeAction({
       className="bg-primary text-white"
       onClick={handleClick}
     >
-      <BackForwardIcon className="w-6 h-6" />
+      <BackForwardIcon className={iconSize} />
     </button>
   );
 }

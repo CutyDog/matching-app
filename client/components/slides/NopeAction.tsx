@@ -3,8 +3,10 @@ import { ThumbsDownIcon } from "../icons";
 
 export default function NopeAction({
   onClick,
+  iconSize = 'w-6 h-6',
 }: {
   onClick?: () => void;
+  iconSize?: string;
 }) {
   const swiper = useSwiper();
   const handleClick = () => {
@@ -17,7 +19,7 @@ export default function NopeAction({
       className="bg-primary text-white"
       onClick={handleClick}
     >
-      <ThumbsDownIcon className="w-6 h-6" />
+      <ThumbsDownIcon className={iconSize} />
     </button>
   );
 }
