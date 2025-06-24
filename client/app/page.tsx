@@ -14,7 +14,7 @@ export default function Home() {
     handleSendLike,
     handleSlideChange,
     isFetching,
-  } = useSwipeCandidates({ pageSize: 3 });
+  } = useSwipeCandidates({ pageSize: 10 });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light py-10 px-2 flex flex-col items-center">
