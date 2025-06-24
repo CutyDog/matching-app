@@ -1,38 +1,54 @@
 'use client';
 
-import { useContext } from 'react';
-import { useRouter } from 'next/navigation';
-import { AuthContext } from '@/context/auth';
-
-function formatDate(dateStr?: string | null) {
-  if (!dateStr) return "-";
-  const date = new Date(dateStr);
-  return date.toLocaleString();
-}
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { BackAction, NopeAction, LikeAction } from '@/components/slides';
+import { CandidateCard } from '@/components/users';
+import { useSwipeCandidates } from '@/hooks/useSwipeCandidates';
 
 export default function Home() {
-  const router = useRouter();
-  const { currentUser } = useContext(AuthContext);
+  const {
+    // swiper,
+    setSwiper,
+    candidates,
+    handleSendLike,
+    handleSlideChange,
+    isFetching,
+  } = useSwipeCandidates({ pageSize: 10 });
 
-  if (currentUser) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light py-10 px-2">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-background/90 shadow-xl rounded-xl px-8 py-10 mb-10 border border-muted text-center">
-            <h1 className="text-3xl font-bold text-primary mb-2">{currentUser.name}</h1>
-            <p className="text-foreground mb-2">最終ログイン: {formatDate(currentUser.lastLoginAt)}</p>
-          </div>
-
-          <div className="flex justify-center">
-            <button
-              className="px-6 py-2 bg-primary text-background rounded hover:bg-primary-dark"
-              onClick={() => router.push('/account')}
-            >
-              アカウントページへ
-            </button>
-          </div>
-        </div>
+  if (candidates.length === 0) {
+    return <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light flex flex-col items-center justify-center py-10 px-2">
+      <div className="w-full flex flex-col items-center justify-center">
+        <p className="text-center text-2xl font-bold">No candidates found</p>
       </div>
-    );
+    </div>
   }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light flex flex-col items-center justify-center py-10 px-2">
+      <div className="w-full flex flex-col items-center justify-center">
+        <Swiper
+          effect="stack"
+          grabCursor={true}
+          onSwiper={setSwiper}
+          onSlideChange={handleSlideChange}
+          className="w-full flex flex-col items-center"
+        >
+          {candidates.map((edge) => (
+            <SwiperSlide key={edge.node?.id}>
+              <div className="flex flex-col items-center justify-center min-h-[600px]">
+                <CandidateCard edge={edge} />
+              </div>
+            </SwiperSlide>
+          ))}
+          <div className="flex flex-row items-center justify-center gap-14 w-full">
+            <BackAction iconSize="w-12 h-12" />
+            <NopeAction iconSize="w-12 h-12" />
+            <LikeAction onClick={handleSendLike} iconSize="w-12 h-12" />
+          </div>
+        </Swiper>
+        {isFetching && <div className="text-center mt-2">Loading more...</div>}
+      </div>
+    </div>
+  );
 }

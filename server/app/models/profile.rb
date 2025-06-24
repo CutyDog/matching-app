@@ -26,4 +26,23 @@ class Profile < ApplicationRecord
   validates :birthday, presence: true
 
   enum :gender, { male: 0, female: 1, other: 2 }
+
+  scope :older_than, ->(age) { where('birthday < ?', age.years.ago) }
+  scope :younger_than, ->(age) { where('birthday > ?', age.years.ago) }
+
+  def age
+    today = Time.zone.today
+    age = today.year - birthday.year
+
+    # 今年まだ誕生日が来ていない場合は、年齢を1つ減らす
+    this_year_before_birthday? ? age - 1 : age
+  end
+
+  private
+
+  def this_year_before_birthday?
+    today = Time.zone.today
+    this_years_birthday = Time.zone.local(today.year, birthday.month, birthday.day)
+    today < this_years_birthday
+  end
 end

@@ -20,6 +20,7 @@ module Types
 
     field :current_account, resolver: Resolvers::Users::CurrentAccount
     field :user, resolver: Resolvers::Users::User
+    field :candidates, resolver: Resolvers::Users::Candidates
 
     field :chat_room, resolver: Resolvers::Chats::ChatRoom
   end

@@ -79,4 +79,9 @@ class User < ApplicationRecord
   def participant?(chat_room)
     chat_room.users.include? self
   end
+
+  def candidates
+    exclude_ids = [id] + active_likes.or(active_matches).pluck(:receiver_id) + passive_matches.pluck(:sender_id)
+    User.active.where.not(id: exclude_ids.uniq).order(last_login_at: :desc)
+  end
 end
