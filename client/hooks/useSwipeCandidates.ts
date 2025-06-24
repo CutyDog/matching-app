@@ -13,6 +13,16 @@ const SEND_LIKE_MUTATION = gql`
   }
 `;
 
+const ACCEPT_LIKE_MUTATION = gql`
+  mutation AcceptLike($senderId: ID!) {
+    acceptLike(input: { senderId: $senderId }) {
+      like {
+        id
+      }
+    }
+  }
+`;
+
 const PAGE_SIZE = 10;
 
 const CANDIDATES_QUERY = gql`
@@ -28,6 +38,7 @@ const CANDIDATES_QUERY = gql`
             age
             introduction
           }
+          likesMe
         }
       }
       pageInfo {
@@ -50,7 +61,9 @@ export const useSwipeCandidates = ({
   const [endCursor, setEndCursor] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [showMatchedPopup, setShowMatchedPopup] = useState(false);
   const [sendLike] = useMutation<{ sendLike: { like: Like } }>(SEND_LIKE_MUTATION);
+  const [acceptLike] = useMutation<{ acceptLike: { like: Like } }>(ACCEPT_LIKE_MUTATION);
   const { data, fetchMore } = useQuery<{ candidates: { edges: UserEdge[]; pageInfo: PageInfo } }>(CANDIDATES_QUERY, {
     variables: { first: pageSize, after: null, passiveLikes },
   });
@@ -69,13 +82,18 @@ export const useSwipeCandidates = ({
     const candidate = candidates[idx]?.node;
     if (!candidate) return;
     try {
-      await sendLike({ variables: { receiverId: candidate.id } });
+      if (candidate.likesMe) {
+        await acceptLike({ variables: { senderId: candidate.id } });
+        setShowMatchedPopup(true);
+      } else {
+        await sendLike({ variables: { receiverId: candidate.id } });
+      }
       setCandidates((prev) => prev.filter((_, i) => i !== idx));
     } catch (error) {
       // エラー処理
       console.error('Failed to send like:', error);
     }
-  }, [swiper, candidates, sendLike]);
+  }, [swiper, candidates, sendLike, acceptLike]);
 
   const fetchMoreCandidates = useCallback(async () => {
     if (!endCursor || isFetching || !hasNextPage) return;
@@ -110,5 +128,7 @@ export const useSwipeCandidates = ({
     handleSendLike,
     handleSlideChange,
     isFetching,
+    showMatchedPopup,
+    setShowMatchedPopup,
   };
 }

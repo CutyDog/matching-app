@@ -6,7 +6,8 @@ input AcceptLikeInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  likeId: ID!
+  likeId: ID
+  senderId: ID
 }
 
 """
@@ -406,6 +407,7 @@ type User {
   email: String
   id: ID!
   lastLoginAt: ISO8601DateTime
+  likesMe: Boolean
   matches: [Like!]
   name: String!
   passiveLikes: [Like!]

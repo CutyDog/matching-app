@@ -13,6 +13,7 @@ RSpec.describe Resolvers::Users::Candidates, type: :request do
             profile {
               avatarUrl
             }
+            likesMe
           }
         }
       }
@@ -38,7 +39,8 @@ RSpec.describe Resolvers::Users::Candidates, type: :request do
               name: candidate.name,
               profile: {
                 avatarUrl: candidate.profile.avatar_url
-              }
+              },
+              likesMe: candidate.id == user.id ? false : candidate.active_likes.exists?(receiver: user)
             }
           end
         }

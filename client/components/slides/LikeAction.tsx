@@ -1,4 +1,3 @@
-import { useSwiper } from "swiper/react";
 import { ThumbsUpIcon } from "../icons";
 
 export default function LikeAction({
@@ -8,10 +7,8 @@ export default function LikeAction({
   onClick?: () => void;
   iconSize?: string;
 }) {
-  const swiper = useSwiper();
   const handleClick = () => {
     if (onClick) onClick();
-    swiper.slideNext();
   };
 
   return (
