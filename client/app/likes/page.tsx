@@ -47,8 +47,7 @@ export default function LikesPage() {
   ]
 
   return (
-    <div className="max-w-2xl mx-auto py-4 px-2 min-h-screen">
-      <h1 className="text-xl font-bold mb-4">いいね一覧</h1>
+    <div className="max-w-2xl mx-auto px-2 min-h-screen">
       <div className="flex w-full border-muted shadow justify-around items-center h-16 mb-4">
         <div className="text-sm font-medium text-center border-b border-gray-200 w-full">
           <ul className="flex flex-wrap -mb-px">

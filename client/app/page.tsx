@@ -8,13 +8,14 @@ import { useSwipeCandidates } from '@/hooks/useSwipeCandidates';
 
 export default function Home() {
   const {
-    // swiper,
     setSwiper,
     candidates,
     handleSendLike,
     handleSlideChange,
     isFetching,
-  } = useSwipeCandidates({ pageSize: 10 });
+  } = useSwipeCandidates({
+    pageSize: 10
+  });
 
   if (candidates.length === 0) {
     return <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light flex flex-col items-center justify-center py-10 px-2">
@@ -34,17 +35,20 @@ export default function Home() {
           onSlideChange={handleSlideChange}
           className="w-full flex flex-col items-center"
         >
-          {candidates.map((edge) => (
-            <SwiperSlide key={edge.node?.id}>
-              <div className="flex flex-col items-center justify-center min-h-[600px]">
-                <CandidateCard edge={edge} />
-              </div>
-            </SwiperSlide>
-          ))}
+          {candidates.map((edge) => {
+            if(!edge.node) return;
+            return (
+              <SwiperSlide key={edge.node.id}>
+                <div className="flex flex-col items-center justify-center min-h-[600px]">
+                  <CandidateCard user={edge.node} />
+                </div>
+              </SwiperSlide>
+            )
+          })}
           <div className="flex flex-row items-center justify-center gap-14 w-full">
             <BackAction iconSize="w-12 h-12" />
-            <NopeAction iconSize="w-12 h-12" />
             <LikeAction onClick={handleSendLike} iconSize="w-12 h-12" />
+            <NopeAction iconSize="w-12 h-12" />
           </div>
         </Swiper>
         {isFetching && <div className="text-center mt-2">Loading more...</div>}

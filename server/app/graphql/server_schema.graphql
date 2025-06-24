@@ -244,6 +244,7 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+    passiveLikes: Boolean = false
   ): UserConnection!
   chatRoom(id: ID!): ChatRoom
   currentAccount: User

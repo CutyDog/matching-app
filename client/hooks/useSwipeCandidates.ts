@@ -16,8 +16,8 @@ const SEND_LIKE_MUTATION = gql`
 const PAGE_SIZE = 10;
 
 const CANDIDATES_QUERY = gql`
-  query Candidates($first: Int, $after: String) {
-    candidates(first: $first, after: $after) {
+  query Candidates($first: Int, $after: String, $passiveLikes: Boolean) {
+    candidates(first: $first, after: $after, passiveLikes: $passiveLikes) {
       edges {
         cursor
         node {
@@ -39,8 +39,10 @@ const CANDIDATES_QUERY = gql`
 `;
 
 export const useSwipeCandidates = ({
+  passiveLikes = false,
   pageSize = PAGE_SIZE,
 }: {
+  passiveLikes?: boolean;
   pageSize?: number;
 }) => {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
@@ -50,7 +52,7 @@ export const useSwipeCandidates = ({
   const [isFetching, setIsFetching] = useState(false);
   const [sendLike] = useMutation<{ sendLike: { like: Like } }>(SEND_LIKE_MUTATION);
   const { data, fetchMore } = useQuery<{ candidates: { edges: UserEdge[]; pageInfo: PageInfo } }>(CANDIDATES_QUERY, {
-    variables: { first: pageSize, after: null },
+    variables: { first: pageSize, after: null, passiveLikes },
   });
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export const useSwipeCandidates = ({
     setIsFetching(true);
     try {
       const result = await fetchMore({
-        variables: { first: pageSize, after: endCursor },
+        variables: { first: pageSize, after: endCursor, passiveLikes },
       });
       const newEdges = result.data?.candidates.edges || [];
       const newPageInfo = result.data?.candidates.pageInfo;
@@ -90,7 +92,7 @@ export const useSwipeCandidates = ({
     } finally {
       setIsFetching(false);
     }
-  }, [pageSize, endCursor, isFetching, hasNextPage, fetchMore]);
+  }, [pageSize, passiveLikes, endCursor, isFetching, hasNextPage, fetchMore]);
 
   const handleSlideChange = useCallback(() => {
     if (!swiper) return;

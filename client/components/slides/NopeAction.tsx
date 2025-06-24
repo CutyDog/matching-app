@@ -1,5 +1,5 @@
 import { useSwiper } from "swiper/react";
-import { ThumbsDownIcon } from "../icons";
+import { ForwardIcon } from "../icons";
 
 export default function NopeAction({
   onClick,
@@ -19,7 +19,7 @@ export default function NopeAction({
       className="bg-primary text-white"
       onClick={handleClick}
     >
-      <ThumbsDownIcon className={iconSize} />
+      <ForwardIcon className={iconSize} />
     </button>
   );
 }

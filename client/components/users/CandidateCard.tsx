@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { UserEdge } from '@/graphql/graphql';
+import { User } from '@/graphql/graphql';
 
 const trimIntroduction = (introduction: string) => {
   // 紹介文を最大40文字でトリミング
@@ -9,9 +9,8 @@ const trimIntroduction = (introduction: string) => {
     : introduction;
 };
 
-export default function CandidateCard({ edge }: { edge: UserEdge }) {
-  const user = edge.node;
-  if (!user) return null;
+export default function CandidateCard({ user }: { user: User }) {
+  if (!user) return;
 
   const trimmedIntroduction = trimIntroduction(user.profile?.introduction || '');
 
