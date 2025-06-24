@@ -172,6 +172,19 @@ export type NewMessagePayload = {
   chatMessage?: Maybe<ChatMessage>;
 };
 
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
 export type Profile = {
   __typename?: 'Profile';
   avatarUrl?: Maybe<Scalars['String']['output']>;
@@ -192,9 +205,18 @@ export enum ProfileGenderEnum {
 
 export type Query = {
   __typename?: 'Query';
+  candidates: UserConnection;
   chatRoom?: Maybe<ChatRoom>;
   currentAccount?: Maybe<User>;
   user?: Maybe<User>;
+};
+
+
+export type QueryCandidatesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -331,6 +353,26 @@ export type User = {
   profile?: Maybe<Profile>;
   status: UserStatusEnum;
   updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+/** The connection type for User. */
+export type UserConnection = {
+  __typename?: 'UserConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<UserEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<User>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type UserEdge = {
+  __typename?: 'UserEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node?: Maybe<User>;
 };
 
 export enum UserStatusEnum {

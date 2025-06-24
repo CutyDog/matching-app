@@ -1,6 +1,5 @@
 'use client'
 
-// import { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { ChatRoom } from '@/graphql/graphql';
 import Link from 'next/link';
