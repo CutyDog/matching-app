@@ -42,13 +42,17 @@ const SEND_LIKE_MUTATION = gql`
   }
 `;
 
+const PAGE_SIZE = 10;
+
 export default function Home() {
+  const [endCursor, setEndCursor] = useState<string | null>(null);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [candidates, setCandidates] = useState<UserEdge[]>([]);
-  // const [after, setAfter] = useState<string | null>(null);
-  const { data } = useQuery<{ candidates: { edges: UserEdge[], pageInfo: PageInfo } }>(CANDIDATES_QUERY, {
+
+  const { data, fetchMore } = useQuery<{ candidates: { edges: UserEdge[], pageInfo: PageInfo } }>(CANDIDATES_QUERY, {
     variables: {
-      first: 10,
+      first: PAGE_SIZE,
       after: null,
     },
   });
@@ -56,20 +60,47 @@ export default function Home() {
 
   useEffect(() => {
     if (data) {
-      // 初回データ取得時にcandidatesをセット
       setCandidates(data.candidates.edges);
+      setEndCursor(data.candidates.pageInfo.endCursor || null);
+      setHasNextPage(data.candidates.pageInfo.hasNextPage);
     }
-  }, [data, setCandidates]);
+  }, [data, setCandidates, setEndCursor]);
 
   if (!data) return <div>Loading...</div>;
 
-  const handleSendLike = () => {
+  const handleSendLike = async () => {
     if (!swiper) return;
     const idx = swiper.activeIndex;
     const candidate = candidates[idx]?.node;
     if (!candidate) return;
-    sendLike({ variables: { receiverId: candidate.id } });
-    setCandidates((prev) => prev.filter((_, i) => i !== idx));
+
+    await sendLike({ variables: { receiverId: candidate.id } });
+
+    const updated = candidates.filter((_, i) => i !== idx);
+    setCandidates(updated);
+  };
+
+  const handleSlideChange = async () => {
+    if (!swiper) return;
+    const idx = swiper.activeIndex;
+    // 最後のカードだった && 次ページがある場合は fetchMore
+    const isLast = idx >= candidates.length - 1;
+
+    if (isLast && hasNextPage && endCursor) {
+      const result = await fetchMore({
+        variables: {
+          first: PAGE_SIZE,
+          after: endCursor,
+        },
+      });
+
+      const newEdges = result.data?.candidates.edges || [];
+      const newPageInfo = result.data?.candidates.pageInfo;
+
+      setCandidates((prev) => [...prev, ...newEdges]);
+      setEndCursor(newPageInfo?.endCursor || null);
+      setHasNextPage(newPageInfo?.hasNextPage || false);
+    }
   };
 
   return (
@@ -80,6 +111,7 @@ export default function Home() {
             effect="stack"
             grabCursor={true}
             onSwiper={setSwiper}
+            onSlideChange={handleSlideChange}
             className="w-full"
           >
             {candidates.map((edge) => (
