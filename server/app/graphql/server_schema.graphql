@@ -35,6 +35,7 @@ type ChatRoom {
   chatMessages: [ChatMessage!]!
   createdAt: ISO8601DateTime!
   id: ID!
+  latestMessage: ChatMessage
   updatedAt: ISO8601DateTime!
   users: [User!]!
 }

@@ -8,6 +8,7 @@ module ObjectTypes
 
     field :users, [ObjectTypes::UserType], null: false
     field :chat_messages, [ObjectTypes::ChatMessageType], null: false
+    field :latest_message, ObjectTypes::ChatMessageType, null: true
 
     def users
       Loaders::AssociationLoader.for(ChatRoom, :users).load(object)
@@ -15,6 +16,10 @@ module ObjectTypes
 
     def chat_messages
       Loaders::AssociationLoader.for(ChatRoom, :chat_messages, scope: ChatMessage.order(created_at: :asc)).load(object)
+    end
+
+    def latest_message
+      Loaders::AssociationLoader.for(ChatRoom, :latest_message).load(object)
     end
   end
 end

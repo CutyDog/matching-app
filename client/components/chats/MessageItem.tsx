@@ -23,7 +23,6 @@ export default function MessageItem({
       key={message.id}
       className={`flex items-end ${isMe ? 'justify-end' : 'justify-start'}`}
     >
-      {/* 相手のメッセージ: 左側 */}
       {!isMe && (
         <Image
           src={src}
@@ -33,11 +32,12 @@ export default function MessageItem({
           className="rounded-full mr-2"
         />
       )}
+
       <div className={`max-w-xs px-4 py-2 rounded-2xl shadow ${isMe ? 'bg-green-200 text-right ml-8' : 'bg-white text-left mr-8'}`}>
         <div className="text-xs text-gray-500 mb-1">{userName}</div>
         <div className="break-words whitespace-pre-line text-black">{content}</div>
       </div>
-      {/* 自分のメッセージ: 右側 */}
+
       {isMe && (
         <Image
           src={src}
