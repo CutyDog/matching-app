@@ -5,13 +5,13 @@ import { AuthContext } from '@/context/auth';
 import { ChatMessage } from '@/graphql/graphql';
 import Image from 'next/image';
 
-export default function MessageItem({
+export const MessageItem = ({
   // isMe,
   message,
 }: {
   // isMe: boolean;
   message: ChatMessage;
-}) {
+}) => {
   const { currentUser } = useContext(AuthContext);
   const isMe = currentUser?.id === message.user.id;
   const src = message.user.profile?.avatarUrl || '/default-avatar.png';

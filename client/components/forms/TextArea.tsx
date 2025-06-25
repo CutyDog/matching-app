@@ -1,4 +1,4 @@
-export default function TextArea({
+export const TextArea = ({
   label,
   name,
   rows,
@@ -14,7 +14,7 @@ export default function TextArea({
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   required?: boolean;
   disabled?: boolean;
-}) {
+}) => {
   return (
     <div>
       <label htmlFor={name} className="block text-sm font-medium text-foreground">

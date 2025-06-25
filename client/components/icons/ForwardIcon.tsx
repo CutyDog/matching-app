@@ -1,4 +1,8 @@
-export default function ForwardIcon({ className }: { className?: string }) {
+export const ForwardIcon = ({
+  className,
+}: {
+  className?: string
+}) => {
   return (
     <svg
       className={className || "size-6"}

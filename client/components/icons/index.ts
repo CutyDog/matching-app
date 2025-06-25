@@ -1,10 +1,10 @@
 // https://heroicons.com/solid
-export { default as ChatIcon } from './ChatIcon';
-export { default as HeartIcon } from './HeartIcon';
-export { default as HeartPinkIcon } from './HeartPinkIcon';
-export { default as HomeIcon } from './HomeIcon';
-export { default as UserIcon } from './UserIcon';
-export { default as ThumbsUpIcon } from './ThumbsUpIcon';
-export { default as ThumbsDownIcon } from './ThumbsDownIcon';
-export { default as BackForwardIcon } from './BackForwardIcon';
-export { default as ForwardIcon } from './ForwardIcon';
+export { ChatIcon } from './ChatIcon';
+export { HeartIcon } from './HeartIcon';
+export { HeartPinkIcon } from './HeartPinkIcon';
+export { HomeIcon } from './HomeIcon';
+export { UserIcon } from './UserIcon';
+export { ThumbsUpIcon } from './ThumbsUpIcon';
+export { ThumbsDownIcon } from './ThumbsDownIcon';
+export { BackForwardIcon } from './BackForwardIcon';
+export { ForwardIcon } from './ForwardIcon';

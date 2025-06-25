@@ -1,4 +1,4 @@
-export default function MessageField({
+export const MessageField = ({
   input,
   setInput,
   disabled,
@@ -6,7 +6,7 @@ export default function MessageField({
   input: string;
   setInput: (input: string) => void;
   disabled: boolean;
-}) {
+}) => {
   return (
     <>
       <textarea

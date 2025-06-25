@@ -1,8 +1,8 @@
-export default function UserIcon({
+export const UserIcon = ({
   className
 }: {
   className?: string
-}) {
+}) => {
   return (
     <svg
       className={className || "w-6 h-6"}

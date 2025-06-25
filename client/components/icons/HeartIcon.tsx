@@ -1,4 +1,8 @@
-export default function HeartIcon({ className }: { className?: string }) {
+export const HeartIcon = ({
+  className,
+}: {
+  className?: string
+}) => {
   return (
     <svg
       className={className || "w-6 h-6"}

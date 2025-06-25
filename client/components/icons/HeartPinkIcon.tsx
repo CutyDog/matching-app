@@ -1,4 +1,4 @@
-export default function HeartPinkIcon() {
+export const HeartPinkIcon = () => {
   return (
     <span className="inline-block bg-pink-100 rounded-full p-4 shadow-lg">
       <svg className="w-12 h-12 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
