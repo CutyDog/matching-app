@@ -4,7 +4,7 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { useQuery } from "@apollo/client";
 import { Query, User } from "@/graphql/graphql";
 import { gql } from "@apollo/client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 interface IAuthContext {
   currentUser: User | null;
 }
@@ -30,12 +30,13 @@ const AuthContext = createContext<IAuthContext>({ currentUser: null });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [currentUser, setcurrentUser] = useState<User | null>(null);
   const { data, loading, error } = useQuery<{ currentAccount: Query["currentAccount"] }>(CURRENT_ACCOUNT);
 
   useEffect(() => {
     async function fetchData() {
-      if (loading) return;
+      if (loading || pathname === '/signup') return;
 
       if (data?.currentAccount) {
         setcurrentUser(data.currentAccount);
@@ -45,7 +46,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     fetchData();
-  }, [data, loading, error, router]);
+  }, [data, loading, error, router, pathname]);
 
   if (loading) return;
 
