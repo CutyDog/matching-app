@@ -1,57 +1,37 @@
 'use client'
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import { BackAction, NopeAction, LikeAction } from '@/components/slides';
-import { CandidateCard } from '@/components/users';
-import { useSwipeCandidates } from '@/hooks/useSwipeCandidates';
+import { useSwipeFeed } from '@/features/feed/hooks';
+import { CandidateList, MatchingPopup } from '@/features/feed/components';
 
 export default function MatchedLikesPage() {
   const {
-    setSwiper,
     candidates,
+    setSwiper,
     handleSendLike,
     handleSlideChange,
     isFetching,
-  } = useSwipeCandidates({
+    showMatchedPopup,
+    setShowMatchedPopup,
+    handleStartChat,
+  } = useSwipeFeed({
     pageSize: 10,
-    passiveLikes: true,
+    passiveLikes: false,
   });
 
-  if (candidates.length === 0) {
-    return <div className="min-h-screen bg-gradient-to-br from-primary-light via-background to-secondary-light flex flex-col items-center justify-center py-10 px-2">
-      <div className="w-full flex flex-col items-center justify-center">
-        <p className="text-center text-2xl font-bold">No candidates found</p>
-      </div>
-    </div>
-  }
-
   return (
-    <div className="w-full flex flex-col items-center justify-center">
-      <Swiper
-        effect="stack"
-        grabCursor={true}
-        onSwiper={setSwiper}
-        onSlideChange={handleSlideChange}
-        className="w-full flex flex-col items-center"
-      >
-        {candidates.map((edge) => {
-          if(!edge.node) return;
-          return (
-            <SwiperSlide key={edge.node.id}>
-              <div className="flex flex-col items-center justify-center min-h-[600px]">
-                <CandidateCard user={edge.node} />
-              </div>
-            </SwiperSlide>
-          )
-        })}
-        <div className="flex flex-row items-center justify-center gap-14 w-full">
-          <BackAction iconSize="w-12 h-12" />
-          <NopeAction iconSize="w-12 h-12" />
-          <LikeAction onClick={handleSendLike} iconSize="w-12 h-12" />
-        </div>
-      </Swiper>
-      {isFetching && <div className="text-center mt-2">Loading more...</div>}
-    </div>
+    <>
+      <CandidateList
+        candidates={candidates}
+        setSwiper={setSwiper}
+        handleSendLike={handleSendLike}
+        handleSlideChange={handleSlideChange}
+        isFetching={isFetching}
+      />
+      <MatchingPopup
+        showMatchedPopup={showMatchedPopup}
+        setShowMatchedPopup={setShowMatchedPopup}
+        handleStartChat={handleStartChat}
+      />
+    </>
   );
 }
