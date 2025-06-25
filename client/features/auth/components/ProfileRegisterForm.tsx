@@ -15,7 +15,7 @@ type ProfileRegisterFormProps = {
   handleAvatarClick: () => void;
   handleFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
   uploading: boolean;
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement> | null;
   error: string;
   handleProfileRegister: (e: React.FormEvent) => void;
   isSubmitting: boolean;
