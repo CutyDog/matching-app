@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HomeIcon, HeartIcon, ChatIcon, UserIcon } from '@/components/icons';
 
-export default function Navigation() {
+export const Navigation = () => {
   const pathname = usePathname();
   const navs = [
     { href: "/", label: "ホーム", icon: HomeIcon },
