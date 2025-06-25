@@ -2,11 +2,12 @@
 
 import { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useMutation } from '@apollo/client';
 import { AuthContext } from '@/context/auth';
 import { SignInPayload } from '@/graphql/graphql';
 import { gql } from '@apollo/client';
-import { HeartIcon } from '@/components/icons';
+import { TextField } from '@/components/forms';
 import { SubmitButton } from '@/components/buttons';
 
 const SIGN_IN = gql`
@@ -30,82 +31,65 @@ export default function LoginPage() {
     }
   }, [currentUser, router]);
 
-  const [signIn, { loading }] = useMutation<{ signIn: SignInPayload }>(SIGN_IN, {
-    onCompleted: (data) => {
+  const [signIn, { loading }] = useMutation<{ signIn: SignInPayload }>(SIGN_IN);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    signIn({ variables: { email, password } }).then(({ data }) => {
       if (data?.signIn?.token) {
         localStorage.setItem('Token', data.signIn.token);
         router.push('/account');
       } else {
         setError('認証に失敗しました');
       }
-    },
-    onError: (error) => {
-      setError(error.message);
-    }
-  });
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    signIn({ variables: { email, password } });
+    });
   };
 
   return (
     <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-muted">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <HeartIcon className="mx-auto h-12 w-auto text-primary" />
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">
           ログイン
         </h2>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-12 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-background py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleLogin}>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-foreground">
-                メールアドレス
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
-                />
-              </div>
-            </div>
+            <TextField
+              label="メールアドレス"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-foreground">
-                パスワード
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="block w-full appearance-none rounded-md border border-muted px-3 py-2 placeholder-gray-400 shadow-sm sm:text-sm"
-                />
-              </div>
-            </div>
+            <TextField
+              label="パスワード"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
 
             {error && <div className="text-sm text-error">{error}</div>}
 
-            <div>
+            <div className="mt-12">
               <SubmitButton isSubmitting={loading}>
                 ログイン
               </SubmitButton>
             </div>
           </form>
+
+          <p className="mt-12 text-center">
+            アカウントをお持ちでない方は{' '}
+            <Link href="/signup" className="text-primary underline">新規登録</Link>
+          </p>
         </div>
       </div>
     </div>
