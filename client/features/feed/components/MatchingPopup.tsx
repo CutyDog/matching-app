@@ -2,16 +2,13 @@
 
 import { HeartPinkIcon } from "@/components/icons";
 
-export const MatchingPopup = ({
-  showMatchedPopup,
-  setShowMatchedPopup,
-  handleStartChat,
-}: {
+type MatchingPopupProps = {
   showMatchedPopup: boolean;
   setShowMatchedPopup: (show: boolean) => void;
   handleStartChat: () => void;
-}) => {
+}
 
+export const MatchingPopup = ({ showMatchedPopup, setShowMatchedPopup, handleStartChat }: MatchingPopupProps) => {
   return (
     <>
       {showMatchedPopup && (

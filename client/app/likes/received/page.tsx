@@ -1,7 +1,7 @@
 'use client'
 
 import { useSwipeFeed } from '@/features/feed/hooks';
-import { CandidateList, MatchingPopup } from '@/features/feed/components';
+import { UserList, MatchingPopup } from '@/features/feed/components';
 
 export default function ReceivedLikesPage() {
   const {
@@ -15,17 +15,18 @@ export default function ReceivedLikesPage() {
     handleStartChat,
   } = useSwipeFeed({
     pageSize: 10,
-    passiveLikes: false,
+    scope: 'passive',
   });
 
   return (
     <>
-      <CandidateList
+      <UserList
         candidates={candidates}
         setSwiper={setSwiper}
         handleSendLike={handleSendLike}
         handleSlideChange={handleSlideChange}
         isFetching={isFetching}
+        emptyMessage="まだいいねをもらっていません"
       />
       <MatchingPopup
         showMatchedPopup={showMatchedPopup}

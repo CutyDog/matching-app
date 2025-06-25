@@ -1,7 +1,7 @@
 'use client';
 
 import { useSwipeFeed } from '@/features/feed/hooks';
-import { CandidateList, MatchingPopup } from '@/features/feed/components';
+import { UserList, MatchingPopup } from '@/features/feed/components';
 
 export default function Home() {
   const {
@@ -15,17 +15,17 @@ export default function Home() {
     handleStartChat,
   } = useSwipeFeed({
     pageSize: 10,
-    passiveLikes: false,
   });
 
   return (
     <>
-      <CandidateList
+      <UserList
         candidates={candidates}
         setSwiper={setSwiper}
         handleSendLike={handleSendLike}
         handleSlideChange={handleSlideChange}
         isFetching={isFetching}
+        emptyMessage="まだユーザーがいません"
       />
       <MatchingPopup
         showMatchedPopup={showMatchedPopup}

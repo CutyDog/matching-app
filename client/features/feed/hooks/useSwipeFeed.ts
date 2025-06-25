@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Swiper as SwiperType } from 'swiper/types';
 import { UserEdge, User } from '@/graphql/graphql';
 import {
@@ -9,13 +9,12 @@ import {
   useStartChat,
 } from '../api';
 
-export const useSwipeFeed = ({
-  pageSize = 10,
-  passiveLikes = false,
-}: {
+type SwipeFeedProps = {
   pageSize?: number;
-  passiveLikes?: boolean;
-}) => {
+  scope?: 'active' | 'passive' | 'matched';
+}
+
+export const useSwipeFeed = ({ pageSize = 10, scope }: SwipeFeedProps) => {
   const router = useRouter();
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [candidates, setCandidates] = useState<UserEdge[]>([]);
@@ -25,11 +24,16 @@ export const useSwipeFeed = ({
   const [showMatchedPopup, setShowMatchedPopup] = useState<boolean>(false);
   const [matchedUser, setMatchedUser] = useState<User | null>(null);
 
-  const { data, fetchMore } = useGetCandidates({
-    first: pageSize,
-    after: null,
-    passiveLikes,
-  });
+  const getCandidatesVariables = useMemo(() => {
+    return {
+      first: pageSize,
+      activeLikes: scope === 'active',
+      passiveLikes: scope === 'passive',
+      matchedLikes: scope === 'matched',
+    }
+  }, [pageSize, scope]);
+
+  const { data, fetchMore } = useGetCandidates({ after: null, ...getCandidatesVariables});
   const [acceptLike] = useAcceptLike();
   const [sendLike] = useSendLike();
   const [startChat] = useStartChat();
@@ -74,9 +78,8 @@ export const useSwipeFeed = ({
     try {
       const result = await fetchMore({
         variables: {
-          first: pageSize,
+          ...getCandidatesVariables,
           after: endCursor,
-          passiveLikes,
         },
       });
       const newEdges = result.data?.candidates.edges || [];
@@ -87,7 +90,7 @@ export const useSwipeFeed = ({
     } finally {
       setIsFetching(false);
     }
-  }, [pageSize, endCursor, passiveLikes, isFetching, hasNextPage, fetchMore]);
+  }, [endCursor, getCandidatesVariables, isFetching, hasNextPage, fetchMore]);
 
   const handleSlideChange = useCallback(() => {
     if (!swiper) return;

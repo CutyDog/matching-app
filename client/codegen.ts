@@ -8,6 +8,7 @@ const config: CodegenConfig = {
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./hooks/**/*.{ts,tsx}",
+    "./features/**/*.{ts,tsx}",
   ],
   generates: {
     "graphql/": {

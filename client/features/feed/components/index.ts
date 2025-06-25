@@ -1,2 +1,2 @@
-export { CandidateList } from "./CandidateList";
+export { UserList } from "./UserList";
 export { MatchingPopup } from "./MatchingPopup";
