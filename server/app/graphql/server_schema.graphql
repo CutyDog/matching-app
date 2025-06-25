@@ -232,6 +232,8 @@ enum ProfileGenderEnum {
 
 type Query {
   candidates(
+    activeLikes: Boolean = false
+
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -251,6 +253,7 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+    matchedLikes: Boolean = false
     passiveLikes: Boolean = false
   ): UserConnection!
   chatRoom(id: ID!): ChatRoom
