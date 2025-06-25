@@ -19,6 +19,23 @@
   }
 }
 
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease;
+  }
+  .animate-zoom-in {
+    animation: zoomIn 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

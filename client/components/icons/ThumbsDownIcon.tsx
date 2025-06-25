@@ -1,4 +1,8 @@
-export default function ThumbsDownIcon({ className }: { className?: string }) {
+export const ThumbsDownIcon = ({
+  className,
+}: {
+  className?: string
+}) => {
   return (
     <svg
       className={className || "size-6"}

@@ -1,4 +1,4 @@
-export default function ActionButton({
+export const ActionButton = ({
   children,
   style,
   onClick,
@@ -8,7 +8,7 @@ export default function ActionButton({
   style?: React.CSSProperties,
   onClick: () => void,
   disabled?: boolean
-}) {
+}) => {
   return (
     <button
       type="button"

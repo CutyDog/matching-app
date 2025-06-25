@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navigation } from "@/components/navigations";
+import { Navigation } from "@/components/layouts";
 import { ApolloWrapper } from '../lib/apollo-provider'
 import { AuthProvider } from '@/context/auth';
 

@@ -1,4 +1,4 @@
-export default function MessageField({
+export const MessageField = ({
   input,
   setInput,
   disabled,
@@ -6,14 +6,14 @@ export default function MessageField({
   input: string;
   setInput: (input: string) => void;
   disabled: boolean;
-}) {
+}) => {
   return (
     <>
-      <input
-        type="text"
+      <textarea
         value={input}
         onChange={e => setInput(e.target.value)}
         placeholder="メッセージを入力"
+        rows={1}
         className="flex-1 border rounded-full px-4 py-2 mr-2 focus:outline-none focus:ring"
       />
       <button

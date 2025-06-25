@@ -1,3 +1,3 @@
-export { default as TextField } from './TextField';
-export { default as TextArea } from './TextArea';
-export { default as MessageField } from './MessageField';
+export { TextField } from './TextField';
+export { TextArea } from './TextArea';
+export { MessageField } from './MessageField';

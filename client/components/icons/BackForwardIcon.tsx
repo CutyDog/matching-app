@@ -1,4 +1,8 @@
-export default function BackForwardIcon({ className }: { className?: string }) {
+export const BackForwardIcon = ({
+  className,
+}: {
+  className?: string
+}) => {
   return (
     <svg
       className={className || "size-6"}

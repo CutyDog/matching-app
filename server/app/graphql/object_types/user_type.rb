@@ -11,12 +11,23 @@ module ObjectTypes
     field :last_login_at, GraphQL::Types::ISO8601DateTime
     field :status, EnumTypes::User::UserStatusEnum, null: false
     field :admin, Boolean, null: false
+    field :likes_me, Boolean, null: true
 
     field :profile, ObjectTypes::ProfileType, null: true
     field :active_likes, [ObjectTypes::LikeType], null: true, require_himself: true
     field :passive_likes, [ObjectTypes::LikeType], null: true, require_himself: true
     field :matches, [ObjectTypes::LikeType], null: true, require_himself: true
     field :chat_rooms, [ObjectTypes::ChatRoomType], null: true, require_himself: true
+
+    def likes_me
+      # 自分の場合はfalse
+      return false if current_user.blank? || object.id == current_user.id
+
+      # 相手が自分にいいねしているかどうか
+      active_likes.then do |active_likes|
+        active_likes.any? { |like| like.receiver_id == current_user.id }
+      end
+    end
 
     def profile
       Loaders::AssociationLoader.for(User, :profile).load(object)

@@ -1,4 +1,4 @@
-export default function TextField({
+export const TextField = ({
   label,
   name,
   type,
@@ -16,7 +16,7 @@ export default function TextField({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   disabled?: boolean;
-}) {
+}) => {
   return (
     <div>
       <label htmlFor={name} className="block text-sm font-medium text-foreground">

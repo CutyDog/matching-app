@@ -1,0 +1,1 @@
+export { useSwipeFeed } from "./useSwipeFeed";

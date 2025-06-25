@@ -1,8 +1,8 @@
-export default function HomeIcon({
+export const HomeIcon = ({
   className
 }: {
   className?: string
-}) {
+}) => {
   return (
     <svg
       className={className || "w-6 h-6"}

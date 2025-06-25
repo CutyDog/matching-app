@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 import { AuthContext } from '@/context/auth';
 import { SignInPayload } from '@/graphql/graphql';
 import { gql } from '@apollo/client';
-import HeartIcon from '@/components/icons/HeartIcon'; // App Logo
+import { HeartIcon } from '@/components/icons';
 import { SubmitButton } from '@/components/buttons';
 
 const SIGN_IN = gql`

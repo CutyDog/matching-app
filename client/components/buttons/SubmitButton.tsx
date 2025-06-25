@@ -1,10 +1,10 @@
-export default function SubmitButton({
+export const SubmitButton = ({
   children,
   isSubmitting
 }: {
   children: React.ReactNode,
   isSubmitting?: boolean,
-}) {
+}) => {
   return (
     <button
       type="submit"
